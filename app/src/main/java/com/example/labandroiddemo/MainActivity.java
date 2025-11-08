@@ -1,12 +1,24 @@
 package com.example.labandroiddemo;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
 
 import com.example.labandroiddemo.database.AppRepository;
 import com.example.labandroiddemo.database.entities.User;
@@ -15,14 +27,18 @@ import com.example.labandroiddemo.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
 
+    private static final String MAIN_ACTIVITY_USER_ID = "com.example.labandroiddemo.MAIN_ACTIVITY_USER_ID";
+    static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.labandroiddemo.SAVED_INSTANCE_STATE_USERID_KEY";
     private static final int LOGGED_OUT = -1;
     private ActivityMainBinding binding;
     private AppRepository repository;
 
-    private int loggedInUserId = -1;
+    private int loggedInUserId = -LOGGED_OUT;
     private User user;
 
     public static final String TAG = "DAC_APP";
+
+    String preference_file_key = "preference_file_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +46,77 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        repository = AppRepository.getRepository(getApplication());
+
+        // === GymLog-style userId retrieval order: SharedPrefs -> savedInstance -> Intent ===
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        loggedInUserId = sharedPreferences.getInt(
+                getString(R.string.preference_userId_key), LOGGED_OUT);
+
+        if (loggedInUserId == LOGGED_OUT && savedInstanceState != null
+                && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+            loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
+        }
+
+        if (loggedInUserId == LOGGED_OUT) {
+            loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+        }
+
+        // If not logged in, go to Login (same behavior you see in GymLog when session missing)
+        if (loggedInUserId == LOGGED_OUT) {
+            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+            finish();
+            return;
+        }
+
+        // === Observe the logged-in user (GymLog pattern) ===
+        LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
+        userObserver.observe(this, u -> {
+            user = u;
+            if (user != null) {
+                // Update the role text exactly when user arrives/changes
+                String role = user.isAdmin() ? "Admin" : "User";
+                String text = "Logged in as: " + user.getUsername() + "\nRole: " + role;
+                binding.roleTextView.setText(text);
+            }
+        });
+
+        // === Logout button (same logout() semantics as GymLog, just on a button) ===
+        binding.logoutButton.setOnClickListener(v -> {
+            logout();
+        });
     }
 
-    private void loginUser(Bundle savedInstanceState) {
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
+        updateSharedPreference();
+    }
 
+    private void logout() {
+        loggedInUserId = LOGGED_OUT;
+        updateSharedPreference();
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+        startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+        finish();
+    }
+
+    private void updateSharedPreference() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(getString(R.string.preference_userId_key), loggedInUserId);
+        sharedPrefEditor.apply();
+    }
+
+    // GymLog-style intent factory
+    static Intent mainActivityIntentFactory(Context context, int userId) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
+        return intent;
     }
 
 }

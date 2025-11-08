@@ -57,5 +57,8 @@ public class AppRepository {
     }
 
 
+    public LiveData<User> getUserByUserId(int userId) {
+        return userDAO.getUserByUserId(userId);
+    }
 
 }
