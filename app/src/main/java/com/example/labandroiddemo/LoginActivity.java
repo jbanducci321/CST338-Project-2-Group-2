@@ -49,9 +49,12 @@ public class LoginActivity extends AppCompatActivity {
         userObserver.observe(this, user -> {
             if (user != null) {
                 String password = binding.passwordLoginEditText.getText().toString();
-                if (password.equals(user.getPassword())) {
-
-                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getUserId()));
+                if (password.equals(user.getPassword())&&!user.isAdmin()) {
+                    startActivity(MainActivity
+                            .mainActivityIntentFactory(getApplicationContext(), user.getUserId()));
+                }else if(password.equals(user.getPassword())&&user.isAdmin()) {
+                    //TODO: Admin activity goes here
+                    toastMaker("No Admin page");
                 } else {
                     toastMaker("Invalid password");
                     binding.passwordLoginEditText.setSelection(0);
