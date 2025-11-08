@@ -11,22 +11,99 @@
         android:id="@+id/roleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:gravity="center"
         android:text="role goes here"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/welcomeUserTextView"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="70dp"
         android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="Welcome\nUsername!"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-    
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/practiceModeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Practice Mode:"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dailyQuestionsButton" />
+
+    <Button
+        android:id="@+id/dailyQuestionsButton"
+        android:layout_margin="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="Daily Questions"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeUserTextView" />
+
+    <Button
+        android:id="@+id/easyQuestionsButton"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="50dp"
+        android:text="Easy Questions"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/practiceModeTextView" />
+
+    <Button
+        android:id="@+id/normalQuestionsButton"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="50dp"
+        android:text="Normal Questions"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/easyQuestionsButton" />
+
+    <Button
+        android:id="@+id/hardQuestionsButton"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="50dp"
+        android:text="Hard Questions"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/normalQuestionsButton" />
+
+    <Button
+        android:id="@+id/statisticsButton"
+        android:layout_width="match_parent"
+        android:layout_margin="40dp"
+        android:layout_height="100dp"
+        android:text="Statistics"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hardQuestionsButton" />
+
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:text="Logout"
-        app:layout_constraintTop_toBottomOf="@id/roleTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

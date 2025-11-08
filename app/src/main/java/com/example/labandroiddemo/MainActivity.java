@@ -1,23 +1,13 @@
 package com.example.labandroiddemo;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 
 import com.example.labandroiddemo.database.AppRepository;
@@ -48,6 +38,62 @@ public class MainActivity extends AppCompatActivity {
 
         repository = AppRepository.getRepository(getApplication());
 
+        loginUser(savedInstanceState);
+
+        // If not logged in, go to Login (same behavior you see in GymLog when session missing)
+        if (loggedInUserId == LOGGED_OUT) {
+            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+            finish();
+            return;
+        }
+
+        updateSharedPreference();
+
+        // === Logout button (same logout() semantics as GymLog, just on a button) ===
+        binding.logoutButton.setOnClickListener(v -> {
+            logout();
+        });
+
+
+        //Questions and Statistic buttons ready for new activities.
+        binding.dailyQuestionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        binding.easyQuestionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+        binding.normalQuestionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        binding.hardQuestionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        binding.statisticsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
+    }
+
+    private void loginUser(Bundle savedInstanceState) {
         // === GymLog-style userId retrieval order: SharedPrefs -> savedInstance -> Intent ===
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -63,14 +109,6 @@ public class MainActivity extends AppCompatActivity {
         if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
         }
-
-        // If not logged in, go to Login (same behavior you see in GymLog when session missing)
-        if (loggedInUserId == LOGGED_OUT) {
-            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
-            finish();
-            return;
-        }
-
         // === Observe the logged-in user (GymLog pattern) ===
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
         userObserver.observe(this, u -> {
@@ -80,12 +118,9 @@ public class MainActivity extends AppCompatActivity {
                 String role = user.isAdmin() ? "Admin" : "User";
                 String text = "Logged in as: " + user.getUsername() + "\nRole: " + role;
                 binding.roleTextView.setText(text);
-            }
-        });
+                binding.welcomeUserTextView.setText("Welcome\n"+user.getUsername()+"!");
 
-        // === Logout button (same logout() semantics as GymLog, just on a button) ===
-        binding.logoutButton.setOnClickListener(v -> {
-            logout();
+            }
         });
     }
 
