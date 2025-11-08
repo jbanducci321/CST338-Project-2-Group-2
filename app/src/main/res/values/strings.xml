@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">LabAndroidDemo</string>
+    <string name="statistics">Statistics</string>
+    <string name="logout">Logout</string>
+    <string name="admin">Admin</string>
+    <string name="edit_daily_question">Edit daily question</string>
+    <string name="edit_statistics">Edit statistics</string>
+    <string name="welcome">Welcome,</string>
 </resources>
