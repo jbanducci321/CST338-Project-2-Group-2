@@ -21,6 +21,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "app_db";
     public static final String USER_TABLE = "users";
+    public static final String QUESTION_TABLE = "questions";
     private static final int NUMBER_OF_THREADS = 4;
 
     public abstract UserDAO userDAO();

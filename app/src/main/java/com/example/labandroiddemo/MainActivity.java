@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "DAC_APP";
 
-    String preference_file_key = "preference_file_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
