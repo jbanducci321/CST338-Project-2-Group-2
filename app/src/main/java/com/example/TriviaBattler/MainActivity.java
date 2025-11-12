@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
             logout();
             return true;
         } else if (id == R.id.stats) {
-            //TODO: SAM CONNECT stats item menu
+            //TODO: SAM CONNECT stats item menu plz
             return true;
         } else if (id == R.id.admin) {
-            //TODO: SAM CONNECT admin landing
+            //TODO: SAM CONNECT admin landing plz
             return true;
         }
 
