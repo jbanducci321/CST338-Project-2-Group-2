@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setSupportActionBar(findViewById(R.id.toolbar));
 
         repository = AppRepository.getRepository(getApplication());
 
@@ -98,28 +100,30 @@ public class MainActivity extends AppCompatActivity {
     //Menu inflater
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.logout_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.logout_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.logoutMenuItem);
 
-        if (id == R.id.logout) {
-            logout();
-            return true;
-        } else if (id == R.id.stats) {
-            //TODO: SAM CONNECT stats item menu
-            return true;
-        } else if (id == R.id.admin) {
-            //TODO: SAM CONNECT admin landing
+        if (user == null) {
+            item.setVisible(false);
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        item.setVisible(true);
+        item.setTitle(user.getUsername());
 
+        item.setOnMenuItemClickListener(menuItem -> {
+            logout();
+            return true;
+        });
+
+        return true;
+    }
     private void loginUser(Bundle savedInstanceState) {
         // === GymLog-style userId retrieval order: SharedPrefs -> savedInstance -> Intent ===
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
