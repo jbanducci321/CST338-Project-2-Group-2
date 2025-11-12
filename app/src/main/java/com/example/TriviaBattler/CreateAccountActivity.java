@@ -21,23 +21,19 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding=ActivityCreateAccountBinding.inflate(getLayoutInflater());
-
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_create_account);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        setContentView(binding.getRoot());
 
 
-        binding.createAccountButton.setOnClickListener(new View.OnClickListener() {
+        binding.backCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) {
+                startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
             }
         });
+
+
 
     }
 
