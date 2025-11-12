@@ -1,13 +1,13 @@
-package com.example.labandroiddemo.database;
+package com.example.TriviaBattler.database;
 
 import android.app.Application;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.labandroiddemo.MainActivity;
-import com.example.labandroiddemo.database.daos.UserDAO;
-import com.example.labandroiddemo.database.entities.User;
+import com.example.TriviaBattler.MainActivity;
+import com.example.TriviaBattler.database.daos.UserDAO;
+import com.example.TriviaBattler.database.entities.User;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;

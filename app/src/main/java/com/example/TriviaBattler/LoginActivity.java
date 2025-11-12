@@ -1,4 +1,4 @@
-package com.example.labandroiddemo;
+package com.example.TriviaBattler;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,16 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 
-import com.example.labandroiddemo.database.AppRepository;
-import com.example.labandroiddemo.database.entities.User;
-import com.example.labandroiddemo.databinding.ActivityLoginBinding;
+import com.example.TriviaBattler.database.AppRepository;
+import com.example.TriviaBattler.database.entities.User;
+import com.example.TriviaBattler.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 

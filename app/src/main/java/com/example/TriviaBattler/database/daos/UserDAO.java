@@ -1,4 +1,4 @@
-package com.example.labandroiddemo.database.daos;
+package com.example.TriviaBattler.database.daos;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -7,8 +7,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.labandroiddemo.database.AppDatabase;
-import com.example.labandroiddemo.database.entities.User;
+import com.example.TriviaBattler.database.AppDatabase;
+import com.example.TriviaBattler.database.entities.User;
 
 @Dao
 public interface UserDAO {

@@ -1,4 +1,4 @@
-package com.example.labandroiddemo;
+package com.example.TriviaBattler;
 
 import org.junit.Test;
 

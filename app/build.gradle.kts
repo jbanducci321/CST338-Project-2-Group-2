@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.labandroiddemo"
+    namespace = "com.example.TriviaBattler"
     compileSdk {
         version = release(36)
     }

@@ -1,9 +1,9 @@
-package com.example.labandroiddemo.database.entities;
+package com.example.TriviaBattler.database.entities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.labandroiddemo.database.AppDatabase;
+import com.example.TriviaBattler.database.AppDatabase;
 
 import java.util.Objects;
 

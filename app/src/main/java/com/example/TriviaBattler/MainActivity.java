@@ -1,4 +1,4 @@
-package com.example.labandroiddemo;
+package com.example.TriviaBattler;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +15,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 
 import com.example.TriviaBattler.R;
-import com.example.labandroiddemo.database.AppRepository;
-import com.example.labandroiddemo.database.entities.User;
-import com.example.labandroiddemo.databinding.ActivityMainBinding;
+import com.example.TriviaBattler.database.AppRepository;
+import com.example.TriviaBattler.database.entities.User;
+import com.example.TriviaBattler.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
