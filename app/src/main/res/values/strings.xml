@@ -1,14 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">LabAndroidDemo</string>
-<<<<<<< HEAD
+
     <string name="preference_file_key">preference_file_key</string>
     <string name="preference_userId_key">logged_in_user_id</string>
-=======
+
     <string name="statistics">Statistics</string>
     <string name="logout">Logout</string>
     <string name="admin">Admin</string>
+
     <string name="edit_daily_question">Edit daily question</string>
     <string name="edit_statistics">Edit statistics</string>
     <string name="welcome">Welcome,</string>
->>>>>>> sam
 </resources>
