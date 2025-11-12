@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.labandroiddemo"
+        applicationId = "com.example.TriviaBattler"
         minSdk = 34
         targetSdk = 36
         versionCode = 1

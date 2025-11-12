@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -54,11 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
         updateSharedPreference();
 
-        // === Logout button (same logout() semantics as GymLog, just on a button) ===
-        binding.logoutButton.setOnClickListener(v -> {
-            logout();
-        });
-
 
         //Questions and Statistic buttons ready for new activities.
         binding.dailyQuestionsButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +93,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    //Menu inflater
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            logout();
+            return true;
+        } else if (id == R.id.stats) {
+            //TODO: stats item menu
+            return true;
+        } else if (id == R.id.admin) {
+            //TODO: admin landing
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void loginUser(Bundle savedInstanceState) {
