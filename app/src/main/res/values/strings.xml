@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LabAndroidDemo</string>
+    <string name="app_name">TriviaBattler</string>
 
     <string name="preference_file_key">preference_file_key</string>
     <string name="preference_userId_key">logged_in_user_id</string>

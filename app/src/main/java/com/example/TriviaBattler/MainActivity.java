@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -111,20 +112,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
+        MenuItem adminItem = menu.findItem(R.id.admin);
 
-        if (id == R.id.logout) {
-            logout();
-            return true;
-        } else if (id == R.id.stats) {
-            //TODO: SAM CONNECT stats item menu
-            return true;
-        } else if (id == R.id.admin) {
-            //TODO: SAM CONNECT admin landing
+        if (userItem == null || adminItem == null) return true;
+
+        if (user == null) {
+            userItem.setVisible(false);
+            adminItem.setVisible(false);
             return true;
         }
 
+        userItem.setVisible(true);
+        View actionView = userItem.getActionView();
+        if (actionView != null) {
+            TextView usernameView = actionView.findViewById(R.id.usernameTitle);
+            if (usernameView != null) {
+                usernameView.setText(user.getUsername());
+            }
+        }
+
+        adminItem.setVisible(user.isAdmin());
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.logout) { logout(); return true; }
+        else if (id == R.id.stats) { //TODO: SAM
+             return true;
+        }
+        else if (id == R.id.admin) {
+            Intent intent = new Intent(this, AdminLanding.class);
+            startActivity(intent);
+             return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -149,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         userObserver.observe(this, u -> {
             user = u;
             if (user != null) {
+                invalidateOptionsMenu();
                 // Update the role text exactly when user arrives/changes
                 String role = user.isAdmin() ? "Admin" : "User";
                 String text = "Logged in as: " + user.getUsername() + "\nRole: " + role;
