@@ -81,9 +81,6 @@ public class AdminLanding extends AppCompatActivity {
         } else if (id == R.id.stats) {
             // TODO: open stats activity
             return true;
-        } else if (id == R.id.admin) {
-            // Already here, maybe refresh or navigate deeper
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
