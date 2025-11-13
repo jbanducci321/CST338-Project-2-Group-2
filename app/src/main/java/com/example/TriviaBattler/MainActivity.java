@@ -94,12 +94,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout();
-            }
-        });
 
 
     }
@@ -146,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
              return true;
         }
         else if (id == R.id.admin) {
-            Intent intent = new Intent(this, AdminLanding.class);
-            startActivity(intent);
-             return true;
+            startActivity(AdminLanding.adminLandingIntentFactory(getApplicationContext()));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

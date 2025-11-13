@@ -1,5 +1,6 @@
 package com.example.TriviaBattler;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -87,5 +88,9 @@ public class AdminLanding extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    static Intent adminLandingIntentFactory(Context context){
+        Intent intent =new Intent(context, AdminLanding.class);
+        return intent;
     }
 }
