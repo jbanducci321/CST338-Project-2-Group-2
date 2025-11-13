@@ -5,6 +5,7 @@
         android:id="@+id/logoutMenuItem"
         android:name="TriviaBattler"
         android:title="LOGGED IN"
+        app:actionLayout="@layout/menu_username_action"
         app:showAsAction="ifRoom" />
 
     <item
