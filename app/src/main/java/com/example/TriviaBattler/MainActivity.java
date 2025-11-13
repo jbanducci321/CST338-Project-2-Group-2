@@ -114,22 +114,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
-        if (userItem != null) {
-            if (user == null) {
-                userItem.setVisible(false);
-            } else {
-                userItem.setVisible(true);
-                View actionView = userItem.getActionView();
-                TextView title = actionView != null ? actionView.findViewById(R.id.usernameTitle) : null;
-                if (title != null) title.setText(user.getUsername());
+        MenuItem adminItem = menu.findItem(R.id.admin);
 
-                userItem.setEnabled(false);
-                if (actionView != null) {
-                    actionView.setClickable(false);
-                    actionView.setFocusable(false);
-                }
+        if (userItem == null || adminItem == null) return true;
+
+        if (user == null) {
+            userItem.setVisible(false);
+            adminItem.setVisible(false);
+            return true;
+        }
+
+        userItem.setVisible(true);
+        View actionView = userItem.getActionView();
+        if (actionView != null) {
+            TextView usernameView = actionView.findViewById(R.id.usernameTitle);
+            if (usernameView != null) {
+                usernameView.setText(user.getUsername());
             }
         }
+
+        adminItem.setVisible(user.isAdmin());
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -140,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
         else if (id == R.id.stats) { //TODO: SAM
              return true;
         }
-        else if (id == R.id.admin) { //TODO: SAM
+        else if (id == R.id.admin) {
+            Intent intent = new Intent(this, AdminLanding.class);
+            startActivity(intent);
              return true;
         }
         return super.onOptionsItemSelected(item);
