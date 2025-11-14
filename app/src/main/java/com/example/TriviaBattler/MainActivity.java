@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //start menu
         setSupportActionBar(findViewById(R.id.toolbar));
 
         repository = AppRepository.getRepository(getApplication());
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Options for dropdown visible or not
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -130,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    //Oh, where the options can take you
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
