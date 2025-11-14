@@ -87,11 +87,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.statisticsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+        binding.statisticsButton.setOnClickListener(view -> {
+            //Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            //startActivity(intent);
         });
 
 
@@ -136,8 +134,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.logout) { logout(); return true; }
-        else if (id == R.id.stats) { //TODO: SAM
-             return true;
+        else if (id == R.id.stats) {
+            //Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            //startActivity(intent);
+            return true;
         }
         else if (id == R.id.admin) {
             startActivity(AdminLanding.adminLandingIntentFactory(getApplicationContext()));
