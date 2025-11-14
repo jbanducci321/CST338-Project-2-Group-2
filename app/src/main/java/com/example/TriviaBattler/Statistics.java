@@ -104,6 +104,7 @@ public class Statistics extends AppCompatActivity {
         finish();
     }
 
+
     static Intent statsIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, Statistics.class);
         intent.putExtra(STATS_ACTIVITY_USER_ID, userId);
