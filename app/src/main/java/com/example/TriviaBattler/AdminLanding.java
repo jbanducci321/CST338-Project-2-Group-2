@@ -82,8 +82,8 @@ public class AdminLanding extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.stats) {
-            //Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
-            //startActivity(intent);
+            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            startActivity(intent);
             return true;
         } else if (id == R.id.admin) {
             // Already here, maybe refresh or navigate deeper
