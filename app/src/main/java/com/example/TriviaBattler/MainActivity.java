@@ -87,11 +87,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.statisticsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+        binding.statisticsButton.setOnClickListener(view -> {
+            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            startActivity(intent);
         });
 
 
