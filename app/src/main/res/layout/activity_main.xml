@@ -24,9 +24,10 @@
         android:gravity="center"
         android:text="role goes here"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        app:layout_constraintTop_toBottomOf="@id/statisticsButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="50dp"/>
 
     <TextView
         android:id="@+id/welcomeUserTextView"
@@ -106,14 +107,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hardQuestionsButton" />
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
