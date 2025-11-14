@@ -7,20 +7,24 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.TriviaBattler.MainActivity;
 import com.example.TriviaBattler.database.daos.UserDAO;
 import com.example.TriviaBattler.database.entities.User;
+import com.example.TriviaBattler.database.typeConverters.LocalDateTypeConverter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@TypeConverters(LocalDateTypeConverter.class)
 @Database(entities = {User.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "app_db";
     public static final String USER_TABLE = "users";
+    public static final String QUESTION_TABLE = "questions";
     private static final int NUMBER_OF_THREADS = 4;
 
     public abstract UserDAO userDAO();
