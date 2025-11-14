@@ -15,6 +15,8 @@ import com.example.TriviaBattler.database.entities.User;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class AdminLanding extends AppCompatActivity {
+    private static final int LOGGED_OUT = -1;
+    private int loggedInUserId = -LOGGED_OUT;
 
     private AppRepository repository;
     private User user;
@@ -80,7 +82,8 @@ public class AdminLanding extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.stats) {
-            // TODO: open stats activity
+            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            startActivity(intent);
             return true;
         } else if (id == R.id.admin) {
             // Already here, maybe refresh or navigate deeper
