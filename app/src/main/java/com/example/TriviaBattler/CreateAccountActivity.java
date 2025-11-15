@@ -52,7 +52,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void verifyNewUser() {
         String username = binding.usernameCreateAccountEditText.getText().toString().trim();
-        String password = binding.passwordCreateAccountEditText.getText().toString().trim();
+        String password = binding.passwordCreateAccountEditText.getText().toString();
         // CHECK FOR EMPTY USERNAME OR PASSWORD
         if (username.isEmpty()) {
             toastMaker("Please enter a username.");
