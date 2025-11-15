@@ -65,7 +65,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             return;
         }
         // CHECK FOR MATCHING PASSWORDS
-        if (!password.equals(binding.confirmPasswordCreateAccountEditText.getText().toString().trim())) {
+        if (!password.equals(binding.confirmPasswordCreateAccountEditText.getText().toString())) {
             toastMaker("Passwords do not match.");
             resetFields();
             return;
