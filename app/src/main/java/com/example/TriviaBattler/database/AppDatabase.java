@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @TypeConverters({LocalDateTypeConverter.class, StringListTypeConverter.class})
-@Database(entities = {User.class, Question.class}, version = 4, exportSchema = false)
+@Database(entities = {User.class, Question.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "app_db";

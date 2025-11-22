@@ -7,16 +7,63 @@
     android:layout_height="match_parent"
     tools:context=".QuestionsActivity">
 
+    <TextView
+        android:id="@+id/textViewD"
+        android:layout_width="328dp"
+        android:layout_height="51dp"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@+id/textViewC"
+        tools:layout_editor_absoluteX="41dp" />
+
+    <TextView
+        android:id="@+id/textViewC"
+        android:layout_width="328dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@+id/textViewB"
+        tools:layout_editor_absoluteX="40dp" />
+
+    <TextView
+        android:id="@+id/textViewB"
+        android:layout_width="328dp"
+        android:layout_height="51dp"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@+id/textViewA"
+        tools:layout_editor_absoluteX="40dp" />
+
     <Button
         android:id="@+id/questionsBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="620dp"
         android:layout_marginEnd="160dp"
         android:text="Back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textViewMainQuestionDisplay"
+        android:gravity="center"
+        android:layout_width="314dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewA"
+        android:layout_width="328dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="132dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMainQuestionDisplay" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

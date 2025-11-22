@@ -31,7 +31,7 @@ public class StringListTypeConverter {
         try {
             JSONArray arr = new JSONArray(json);
             for (int i = 0; i < arr.length(); ++i) {
-                list.add(arr.toString(i));
+                list.add(arr.optString(i));
             }
         }
         catch (JSONException ignored) {}
