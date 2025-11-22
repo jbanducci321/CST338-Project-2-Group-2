@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LabAndroidDemo">
         <activity
+            android:name=".QuestionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Statistics"
             android:exported="false" />
         <activity

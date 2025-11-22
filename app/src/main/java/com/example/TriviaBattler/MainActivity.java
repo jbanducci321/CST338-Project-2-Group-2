@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         binding.easyQuestionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(QuestionsActivity.questionsIntentFactory(getApplicationContext()));
 
             }
         });
