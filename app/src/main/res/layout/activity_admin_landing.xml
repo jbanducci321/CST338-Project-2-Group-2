@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/daily_Question_Button" />
 
     <Button
-        android:id="@+id/add_Questions"
+        android:id="@+id/buttonAddQuestions"
         android:layout_width="245dp"
         android:layout_height="119dp"
         android:layout_marginTop="40dp"

@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private AppRepository repository;
 
+    public static final String EXTRA_DIFFICULTY = "EXTRA_DIFFICULTY";
+
     private int loggedInUserId = -LOGGED_OUT;
     private User user;
 
@@ -65,27 +67,27 @@ public class MainActivity extends AppCompatActivity {
         binding.dailyQuestionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(getApplicationContext()));
+            }
+        });
+        binding.easyQuestionsButton.setOnClickListener(new View.OnClickListener() { //Easy questions
+            @Override
+            public void onClick(View view) {
+                startActivity(QuestionsActivity.questionsIntentFactory(getApplicationContext(), "easy"));
 
             }
         });
-        binding.easyQuestionsButton.setOnClickListener(new View.OnClickListener() {
+        binding.normalQuestionsButton.setOnClickListener(new View.OnClickListener() { //Medium questions
             @Override
             public void onClick(View view) {
-
-
-            }
-        });
-        binding.normalQuestionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+                startActivity(QuestionsActivity.questionsIntentFactory(getApplicationContext(), "medium"));
             }
         });
 
-        binding.hardQuestionsButton.setOnClickListener(new View.OnClickListener() {
+        binding.hardQuestionsButton.setOnClickListener(new View.OnClickListener() { //Hard questions
             @Override
             public void onClick(View view) {
-
+                startActivity(QuestionsActivity.questionsIntentFactory(getApplicationContext(), "hard"));
             }
         });
 
