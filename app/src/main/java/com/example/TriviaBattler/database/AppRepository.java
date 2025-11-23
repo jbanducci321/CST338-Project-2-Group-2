@@ -113,7 +113,7 @@ public class AppRepository {
                         assert response.body() != null;
                         for (ApiQuestion dto : response.body().results) {
                             toInsert.add(new Question(dto.type, dto.difficulty, dto.category, dto.question,
-                                    dto.correctAnswer, dto.incorrectAnswers));
+                                    dto.correct_answer, dto.incorrect_answers));
                         }
 
                         AppDatabase.databaseWriteExecutor.execute(() ->

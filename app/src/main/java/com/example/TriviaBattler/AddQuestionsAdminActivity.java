@@ -28,6 +28,16 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
         repository = AppRepository.getRepository(getApplication());
         int userId = getIntent().getIntExtra("USER_ID", -1);
 
+        binding.buttonTempSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int amount = Integer.parseInt(binding.editTextTempNumberAmount.getText().toString().trim());
+                String difficulty = binding.editTextTempDifficulty.getText().toString().trim().toLowerCase();
+
+                repository.apiCall(difficulty, amount);
+            }
+        });
+
         binding.buttonTempBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
