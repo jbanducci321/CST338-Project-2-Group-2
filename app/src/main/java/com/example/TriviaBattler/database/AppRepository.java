@@ -6,15 +6,23 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.example.TriviaBattler.MainActivity;
+import com.example.TriviaBattler.api.ApiClient;
+import com.example.TriviaBattler.api.dto.ApiQuestion;
+import com.example.TriviaBattler.api.dto.ApiResponse;
 import com.example.TriviaBattler.database.daos.QuestionDAO;
 import com.example.TriviaBattler.database.daos.UserDAO;
 import com.example.TriviaBattler.database.entities.Question;
 import com.example.TriviaBattler.database.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AppRepository {
 
@@ -91,4 +99,32 @@ public class AppRepository {
     //Stats related
     //TODO: Add stats stuff here
 
+
+
+    //API related
+    public void apiCall(String difficulty, int amount) {
+        ApiClient.getService()
+                .getQuestions(amount, difficulty)
+                .enqueue(new Callback<ApiResponse>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                        List<Question> toInsert = new ArrayList<>();
+
+                        assert response.body() != null;
+                        for (ApiQuestion dto : response.body().results) {
+                            toInsert.add(new Question(dto.type, dto.difficulty, dto.category, dto.question,
+                                    dto.correctAnswer, dto.incorrectAnswers));
+                        }
+
+                        AppDatabase.databaseWriteExecutor.execute(() ->
+                                questionDAO.insertALL(toInsert));
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+                    }
+                });
+    }
 }
