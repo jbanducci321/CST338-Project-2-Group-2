@@ -10,8 +10,10 @@ import com.example.TriviaBattler.api.ApiClient;
 import com.example.TriviaBattler.api.dto.ApiQuestion;
 import com.example.TriviaBattler.api.dto.ApiResponse;
 import com.example.TriviaBattler.database.daos.QuestionDAO;
+import com.example.TriviaBattler.database.daos.StatsDAO;
 import com.example.TriviaBattler.database.daos.UserDAO;
 import com.example.TriviaBattler.database.entities.Question;
+import com.example.TriviaBattler.database.entities.Stats;
 import com.example.TriviaBattler.database.entities.User;
 
 import java.util.ArrayList;
@@ -29,12 +31,15 @@ public class AppRepository {
     private final UserDAO userDAO;
     private final QuestionDAO questionDAO;
 
+    private final StatsDAO statsDAO;
+
     private static AppRepository repository;
 
     public AppRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         this.userDAO = db.userDAO();
         this.questionDAO = db.questionDAO();
+        this.statsDAO = db.statsDAO();
     }
 
     public static AppRepository getRepository(Application application) {
@@ -98,6 +103,24 @@ public class AppRepository {
 
     //Stats related
     //TODO: Add stats stuff here
+
+    public LiveData<Stats> getStatsByUserId(int userId) {
+        return statsDAO.observeByUserId(userId);
+    }
+
+    public void recordResult(int userId, int addCorrect, int addWrong) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            statsDAO.incrementCounts(userId, addCorrect, addWrong);
+            Stats s = statsDAO.getByUserId(userId);
+            if (s != null) {
+                int total = s.getCorrectCount() + s.getWrongCount();
+                s.setTotalCount(total);
+                double pct = (total == 0) ? 0.0 : (s.getCorrectCount() * 100.0) / total;
+                s.setOverallScore(pct);
+                statsDAO.update(s);
+            }
+        });
+    }
 
 
 

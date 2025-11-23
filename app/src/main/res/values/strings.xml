@@ -12,4 +12,9 @@
     <string name="edit_daily_question">Edit daily question</string>
     <string name="edit_statistics">Edit statistics</string>
     <string name="welcome">Welcome,</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="total_questions_answered">Total Questions Answered:</string>
+    <string name="correct_answers">Correct Answers:</string>
+    <string name="incorrect_answers">Incorrect Answers:</string>
+    <string name="total_score">Total Score:</string>
 </resources>
