@@ -81,6 +81,17 @@ public class AppRepository {
     }
 
 
+    public void setAdmin(String username, boolean isAdmin) { //Promote/demote a user as admin by their username
+        AppDatabase.databaseWriteExecutor.execute(()->{
+            userDAO.setAdminByUsername(username, isAdmin);
+        });
+    }
+
+    public boolean checkAvailableUsername(String username) {
+        return userDAO.checkUsername(username);
+    }
+
+
     //Question related
     public void insertQuestion (Question question) { //Add in a single question
         AppDatabase.databaseWriteExecutor.execute(()->
@@ -140,13 +151,13 @@ public class AppRepository {
                         }
 
                         AppDatabase.databaseWriteExecutor.execute(() ->
-                                questionDAO.insertALL(toInsert));
+                                questionDAO.insertALL(toInsert)); //Calls insert all query directly from the dao
 
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                        //TODO: Add error handling to the api call (need to also handle potential errors in connected activities)
                     }
                 });
     }
