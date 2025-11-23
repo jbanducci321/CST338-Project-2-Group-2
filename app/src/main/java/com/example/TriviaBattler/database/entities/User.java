@@ -1,25 +1,30 @@
 package com.example.TriviaBattler.database.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.TriviaBattler.database.AppDatabase;
 
 import java.util.Objects;
 
-@Entity(tableName = AppDatabase.USER_TABLE)
+@Entity(tableName = AppDatabase.USER_TABLE,
+        indices = {@Index(value = {"username"}, unique = true)} //Ensures username must be unique and not null
+)
 public class User {
 
     @PrimaryKey(autoGenerate = true)
     private int userId;
 
+    @NonNull
     private String username;
 
     private String password;
 
     private boolean isAdmin;
 
-    public User(String username, String password) {
+    public User(@NonNull String username, String password) {
         this.username = username;
         this.password = password;
         isAdmin = false;
@@ -45,11 +50,12 @@ public class User {
         this.userId = userId;
     }
 
+    @NonNull
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(@NonNull String username) {
         this.username = username;
     }
 
