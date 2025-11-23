@@ -12,8 +12,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.TriviaBattler.MainActivity;
 import com.example.TriviaBattler.database.daos.QuestionDAO;
+import com.example.TriviaBattler.database.daos.StatsDAO;
 import com.example.TriviaBattler.database.daos.UserDAO;
 import com.example.TriviaBattler.database.entities.Question;
+import com.example.TriviaBattler.database.entities.Stats;
 import com.example.TriviaBattler.database.entities.User;
 import com.example.TriviaBattler.database.typeConverters.LocalDateTypeConverter;
 import com.example.TriviaBattler.database.typeConverters.StringListTypeConverter;
@@ -23,7 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @TypeConverters({LocalDateTypeConverter.class, StringListTypeConverter.class})
-@Database(entities = {User.class, Question.class}, version = 5, exportSchema = false)
+@Database(entities = {User.class, Question.class, Stats.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "app_db";
@@ -34,6 +36,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UserDAO userDAO();
     public abstract QuestionDAO questionDAO();
+    public abstract StatsDAO statsDAO();
 
     private static volatile AppDatabase INSTANCE;
 
@@ -60,6 +63,17 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+
+            //Trigger for automatically assigning user id to a stats row (when a new user is added then stats are created for them)
+            db.execSQL(
+                    "CREATE TRIGGER IF NOT EXISTS trg_after_user_insert " +
+                            "AFTER INSERT ON " + USER_TABLE + " " +
+                            "BEGIN " +
+                            " INSERT INTO " + STATS_TABLE + " (userId, correctCount, wrongCount, totalCount, overallScore) " +
+                            " VALUES (new.userId, 0, 0, 0, 0.0); " +
+                            "END;"
+            );
+
             Log.i(MainActivity.TAG, "Database Created");
             databaseWriteExecutor.execute(() -> {
                 UserDAO dao = INSTANCE.userDAO();
@@ -83,6 +97,21 @@ public abstract class AppDatabase extends RoomDatabase {
                 qDao.insert(demoQ);
             });
 
+        }
+
+
+        //Ensures trigger exists (ran into errors and this fixed it)
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            // Ensure trigger exists even if DB was created earlier (helps during iterative dev).
+            db.execSQL(
+                    "CREATE TRIGGER IF NOT EXISTS trg_after_user_insert " +
+                            "AFTER INSERT ON " + USER_TABLE + " " +
+                            "BEGIN " +
+                            "  INSERT INTO " + STATS_TABLE + " (userId, correctCount, wrongCount, totalCount, overallScore) " +
+                            "  VALUES (new.userId, 0, 0, 0, 0.0); " +
+                            "END;"
+            );
         }
 
     };
