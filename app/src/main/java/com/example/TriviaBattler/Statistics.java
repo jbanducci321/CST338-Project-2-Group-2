@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
 import com.example.TriviaBattler.database.AppRepository;
+import com.example.TriviaBattler.database.entities.Stats;
 import com.example.TriviaBattler.database.entities.User;
 
 public class Statistics extends AppCompatActivity {
@@ -24,14 +25,34 @@ public class Statistics extends AppCompatActivity {
     private User user;
     private int loggedInUserId = LOGGED_OUT;
 
+    private TextView correctTv;
+    private TextView incorrectTv;
+    private TextView totalTv;
+    private TextView questionScoreTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
         setSupportActionBar(findViewById(R.id.toolbar));
 
-        //TODO STATS REPOSITORY repository  ;
+        repository = AppRepository.getRepository(getApplication());
 
+        correctTv = findViewById(R.id.ca_score);
+        incorrectTv = findViewById(R.id.ia_score);
+        totalTv = findViewById(R.id.ts_score);
+        questionScoreTv = findViewById(R.id.qa_score);
+
+        if (loggedInUserId != LOGGED_OUT) {
+            LiveData<Stats> statsLive = repository.getStatsByUserId(loggedInUserId);
+            statsLive.observe(this, s -> {
+                if (s == null) return;
+                correctTv.setText(String.valueOf(s.getCorrectCount()));
+                incorrectTv.setText(String.valueOf(s.getWrongCount()));
+                totalTv.setText(String.valueOf(s.getTotalCount()));
+                questionScoreTv.setText(String.format(java.util.Locale.US, "%.1f%%", s.getOverallScore()));
+            });
+        }
 
         loggedInUserId = getIntent().getIntExtra(STATS_ACTIVITY_USER_ID, LOGGED_OUT);
         if (loggedInUserId == LOGGED_OUT) {

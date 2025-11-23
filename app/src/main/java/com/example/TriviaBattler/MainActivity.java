@@ -62,33 +62,34 @@ public class MainActivity extends AppCompatActivity {
 
         updateSharedPreference();
 
-
-        //Questions and Statistic buttons ready for new activities.
         binding.dailyQuestionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(getApplicationContext()));
             }
         });
-        binding.easyQuestionsButton.setOnClickListener(new View.OnClickListener() { //Easy questions
-            @Override
-            public void onClick(View view) {
-                startActivity(QuestionsActivity.questionsIntentFactory(getApplicationContext(), "easy"));
-
-            }
-        });
-        binding.normalQuestionsButton.setOnClickListener(new View.OnClickListener() { //Medium questions
-            @Override
-            public void onClick(View view) {
-                startActivity(QuestionsActivity.questionsIntentFactory(getApplicationContext(), "medium"));
-            }
+        binding.easyQuestionsButton.setOnClickListener(v -> {
+            startActivity(QuestionsActivity.questionsIntentFactory(
+                    getApplicationContext(),
+                    loggedInUserId,
+                    "easy"
+            ));
         });
 
-        binding.hardQuestionsButton.setOnClickListener(new View.OnClickListener() { //Hard questions
-            @Override
-            public void onClick(View view) {
-                startActivity(QuestionsActivity.questionsIntentFactory(getApplicationContext(), "hard"));
-            }
+        binding.normalQuestionsButton.setOnClickListener(v -> {
+            startActivity(QuestionsActivity.questionsIntentFactory(
+                    getApplicationContext(),
+                    loggedInUserId,
+                    "medium"
+            ));
+        });
+
+        binding.hardQuestionsButton.setOnClickListener(v -> {
+            startActivity(QuestionsActivity.questionsIntentFactory(
+                    getApplicationContext(),
+                    loggedInUserId,
+                    "hard"
+            ));
         });
 
         binding.statisticsButton.setOnClickListener(view -> {

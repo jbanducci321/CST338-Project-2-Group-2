@@ -20,6 +20,9 @@ public interface StatsDAO {
     int update(Stats stats);
 
     @Query("SELECT * FROM " + AppDatabase.STATS_TABLE + " WHERE userId = :userId LIMIT 1")
+    LiveData<Stats> observeByUserId(int userId);
+
+    @Query("SELECT * FROM " + AppDatabase.STATS_TABLE + " WHERE userId = :userId LIMIT 1")
     LiveData<Stats> getByUserIdLive(int userId);
 
     @Query("SELECT * FROM " + AppDatabase.STATS_TABLE + " WHERE userId = :userId LIMIT 1")
