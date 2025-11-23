@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         binding.dailyQuestionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(getApplicationContext()));
             }
         });
         binding.easyQuestionsButton.setOnClickListener(new View.OnClickListener() { //Easy questions
