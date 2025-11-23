@@ -26,6 +26,7 @@ public class AdminLanding extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_landing);
 
+        //Menu things
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,12 +43,14 @@ public class AdminLanding extends AppCompatActivity {
         }
     }
 
+    //Menu Inflater
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
+    //Visibility of menu items
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -70,6 +73,7 @@ public class AdminLanding extends AppCompatActivity {
         return true;
     }
 
+    //Options for menu
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -84,9 +88,6 @@ public class AdminLanding extends AppCompatActivity {
         } else if (id == R.id.stats) {
             Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
             startActivity(intent);
-            return true;
-        } else if (id == R.id.admin) {
-            // Already here, maybe refresh or navigate deeper
             return true;
         }
 

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dip"
         android:gravity="center"
-        android:text="Test For Login"
+        android:text="Login"
         android:textSize="42sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

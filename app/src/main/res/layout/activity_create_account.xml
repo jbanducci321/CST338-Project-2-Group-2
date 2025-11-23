@@ -43,6 +43,7 @@
         android:autofillHints="Please enter username"
         android:gravity="center"
         android:hint="Password"
+        android:inputType="textPassword"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
