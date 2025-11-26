@@ -17,6 +17,8 @@ import com.example.TriviaBattler.database.AppRepository;
 import com.example.TriviaBattler.database.entities.Stats;
 import com.example.TriviaBattler.database.entities.User;
 
+import java.util.Objects;
+
 public class Statistics extends AppCompatActivity {
     private static final String STATS_ACTIVITY_USER_ID = "com.example.labandroiddemo.STATS_ACTIVITY_USER_ID";
     private static final int LOGGED_OUT = -1;
@@ -36,12 +38,20 @@ public class Statistics extends AppCompatActivity {
         setContentView(R.layout.activity_statistics);
         setSupportActionBar(findViewById(R.id.toolbar));
 
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
         repository = AppRepository.getRepository(getApplication());
 
         correctTv = findViewById(R.id.ca_score);
         incorrectTv = findViewById(R.id.ia_score);
         totalTv = findViewById(R.id.ts_score);
         questionScoreTv = findViewById(R.id.qa_score);
+
+        loggedInUserId = getIntent().getIntExtra(STATS_ACTIVITY_USER_ID, LOGGED_OUT);
+        if (loggedInUserId == LOGGED_OUT) {
+            SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+            loggedInUserId = sp.getInt(getString(R.string.preference_userId_key), LOGGED_OUT);
+        }
 
         if (loggedInUserId != LOGGED_OUT) {
             LiveData<Stats> statsLive = repository.getStatsByUserId(loggedInUserId);
@@ -52,12 +62,6 @@ public class Statistics extends AppCompatActivity {
                 totalTv.setText(String.valueOf(s.getTotalCount()));
                 questionScoreTv.setText(String.format(java.util.Locale.US, "%.1f%%", s.getOverallScore()));
             });
-        }
-
-        loggedInUserId = getIntent().getIntExtra(STATS_ACTIVITY_USER_ID, LOGGED_OUT);
-        if (loggedInUserId == LOGGED_OUT) {
-            SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
-            loggedInUserId = sp.getInt(getString(R.string.preference_userId_key), LOGGED_OUT);
         }
 
         if (loggedInUserId != LOGGED_OUT) {
@@ -102,18 +106,25 @@ public class Statistics extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.logout) {
-            logout();
+
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        } else if (id == R.id.logout) {
+            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+            finish();
             return true;
         } else if (id == R.id.stats) {
-            // already here
+            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            startActivity(intent);
             return true;
-        } else if (id == R.id.admin) {
+        }else if (id == R.id.admin) {
             Intent intent = new Intent(this, AdminLanding.class);
             intent.putExtra(STATS_ACTIVITY_USER_ID, loggedInUserId);
             startActivity(intent);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

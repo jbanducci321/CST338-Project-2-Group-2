@@ -112,30 +112,42 @@ public class AppRepository {
     }
 
 
-    //Stats related
-    //TODO: Add stats stuff here
+    public void recordResult(int userId, int addCorrect, int addWrong) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+
+            statsDAO.incrementCounts(userId, addCorrect, addWrong);
+
+            Stats s = statsDAO.getByUserId(userId);
+            if (s == null) return;
+
+            int total = s.getCorrectCount() + s.getWrongCount();
+            s.setTotalCount(total);
+
+            double pct = (total == 0) ? 0.0 : (s.getCorrectCount() * 100.0) / total;
+            s.setOverallScore(pct);
+
+            statsDAO.update(s);
+
+            Log.d("STATS", "Updated stats for user=" + userId +
+                    " correct=" + s.getCorrectCount() +
+                    " wrong=" + s.getWrongCount() +
+                    " total=" + s.getTotalCount() +
+                    " score=" + s.getOverallScore());
+        });
+    }
 
     public LiveData<Stats> getStatsByUserId(int userId) {
         return statsDAO.observeByUserId(userId);
     }
 
-    public void recordResult(int userId, int addCorrect, int addWrong) {
+    //API related
+
+    public void refreshQuestionsFromApi(String difficulty, int amount) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            statsDAO.incrementCounts(userId, addCorrect, addWrong);
-            Stats s = statsDAO.getByUserId(userId);
-            if (s != null) {
-                int total = s.getCorrectCount() + s.getWrongCount();
-                s.setTotalCount(total);
-                double pct = (total == 0) ? 0.0 : (s.getCorrectCount() * 100.0) / total;
-                s.setOverallScore(pct);
-                statsDAO.update(s);
-            }
+            questionDAO.deleteByDifficulty(difficulty);
+            Call<ApiResponse> call = ApiClient.getService().getQuestions(amount, difficulty);
         });
     }
-
-
-
-    //API related
     public void apiCall(String difficulty, int amount) {
         ApiClient.getService()
                 .getQuestions(amount, difficulty)
