@@ -41,7 +41,6 @@ public class QuestionsActivity extends AppCompatActivity {
     public static final String EXTRA_USER_ID = "USER_ID";
 
     private int currentQuestionIndex = 1;
-
     private static final int TOTAL_QUESTIONS = 10;
 
     @Override
@@ -58,9 +57,8 @@ public class QuestionsActivity extends AppCompatActivity {
         userId = getIntent().getIntExtra(EXTRA_USER_ID, -1);
         difficulty = getIntent().getStringExtra(EXTRA_DIFFICULTY);
 
-        displayQuestion(difficulty);
-
         updateQuestionCountDisplay();
+        displayQuestion(difficulty);
     }
 
     //Menu Inflater
@@ -182,7 +180,6 @@ public class QuestionsActivity extends AppCompatActivity {
 
         currentQuestionIndex++;
         updateQuestionCountDisplay();
-
         displayQuestion(difficulty);
     }
 

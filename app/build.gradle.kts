@@ -52,6 +52,10 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor( libs.room.compiler)
 
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("org.robolectric:robolectric:4.10.3")
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
