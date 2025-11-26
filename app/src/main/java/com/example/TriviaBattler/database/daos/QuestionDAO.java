@@ -19,6 +19,12 @@ public interface QuestionDAO {
     void insert(Question question);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertQuestions(List<Question> questions);
+
+    @Query("DELETE FROM " + AppDatabase.QUESTION_TABLE + " WHERE difficulty = :difficulty")
+    void deleteByDifficulty(String difficulty);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertALL (List<Question> questions);
 
     @Query("DELETE FROM " + AppDatabase.QUESTION_TABLE)

@@ -3,24 +3,35 @@ package com.example.TriviaBattler;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 import androidx.lifecycle.LiveData;
 
 import com.example.TriviaBattler.database.AppRepository;
 import com.example.TriviaBattler.database.entities.Question;
+import com.example.TriviaBattler.database.entities.User;
 import com.example.TriviaBattler.databinding.ActivityQuestionsBinding;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class QuestionsActivity extends AppCompatActivity {
 
-    private ActivityQuestionsBinding binding;
+    private static final int LOGGED_OUT = -1;
+    private int loggedInUserId = -LOGGED_OUT;
+
     private AppRepository repository;
+    private User user;
+    private ActivityQuestionsBinding binding;
 
     private int userId = -1;
     private String difficulty = null;
@@ -29,7 +40,9 @@ public class QuestionsActivity extends AppCompatActivity {
     public static final String EXTRA_DIFFICULTY = "EXTRA_DIFFICULTY";
     public static final String EXTRA_USER_ID = "USER_ID";
 
+    private int currentQuestionIndex = 1;
 
+    private static final int TOTAL_QUESTIONS = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +50,72 @@ public class QuestionsActivity extends AppCompatActivity {
         binding = ActivityQuestionsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setSupportActionBar(findViewById(R.id.toolbar));
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
         repository = AppRepository.getRepository(getApplication());
 
         userId = getIntent().getIntExtra(EXTRA_USER_ID, -1);
         difficulty = getIntent().getStringExtra(EXTRA_DIFFICULTY);
 
-        displayQuestion(difficulty); // show the first question
+        displayQuestion(difficulty);
 
-        binding.questionsBackButton.setOnClickListener(v ->
-                startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), userId))
-        );
+        updateQuestionCountDisplay();
+    }
+
+    //Menu Inflater
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+        return true;
+    }
+
+    //Visibility of menu items
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
+        MenuItem adminItem = menu.findItem(R.id.admin);
+
+        if (user == null) {
+            userItem.setVisible(false);
+            adminItem.setVisible(false);
+            return true;
+        }
+
+        userItem.setVisible(true);
+        View actionView = userItem.getActionView();
+        if (actionView != null) {
+            TextView usernameView = actionView.findViewById(R.id.usernameTitle);
+            if (usernameView != null) usernameView.setText(user.getUsername());
+        }
+
+        adminItem.setVisible(user.isAdmin());
+        return true;
+    }
+
+    //Options for menu
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        } else if (id == R.id.logout) {
+            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+            finish();
+            return true;
+        } else if (id == R.id.stats) {
+            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            startActivity(intent);
+            return true;
+        }else if (id == R.id.admin) {
+            Intent intent = new Intent(this, AdminLanding.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void displayQuestion(String difficulty) {
@@ -82,10 +151,10 @@ public class QuestionsActivity extends AppCompatActivity {
 
             final String correct = q.getCorrectAnswer() == null ? "" : q.getCorrectAnswer();
 
-            binding.textViewA.setOnClickListener(v -> handleAnswerClick(answers.get(0), correct));
-            binding.textViewB.setOnClickListener(v -> handleAnswerClick(answers.get(1), correct));
-            binding.textViewC.setOnClickListener(v -> handleAnswerClick(answers.get(2), correct));
-            binding.textViewD.setOnClickListener(v -> handleAnswerClick(answers.get(3), correct));
+            binding.textViewA.setOnClickListener(v -> answerClick(answers.get(0), correct));
+            binding.textViewB.setOnClickListener(v -> answerClick(answers.get(1), correct));
+            binding.textViewC.setOnClickListener(v -> answerClick(answers.get(2), correct));
+            binding.textViewD.setOnClickListener(v -> answerClick(answers.get(3), correct));
         });
     }
 
@@ -96,18 +165,30 @@ public class QuestionsActivity extends AppCompatActivity {
         binding.textViewD.setOnClickListener(null);
     }
 
-    private void handleAnswerClick(String selectedAnswer, String correctAnswer) {
-        // Compare raw strings (we displayed HTML, but we’re comparing the original values)
+    private void answerClick(String selectedAnswer, String correctAnswer) {
         if (selectedAnswer != null && selectedAnswer.equals(correctAnswer)) {
-            toastMaker("✅ Correct!");
+            toastMaker("Correct!");
             repository.recordResult(userId, 1, 0);
         } else {
-            toastMaker("❌ Incorrect!");
+            toastMaker("Incorrect!");
             repository.recordResult(userId, 0, 1);
         }
 
-        // Load the next question
+        if (currentQuestionIndex >= TOTAL_QUESTIONS) {
+            Toast.makeText(this, "Quiz complete!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        currentQuestionIndex++;
+        updateQuestionCountDisplay();
+
         displayQuestion(difficulty);
+    }
+
+    private void updateQuestionCountDisplay() {
+        TextView countView = findViewById(R.id.questionCount);
+        countView.setText(currentQuestionIndex + "/" + TOTAL_QUESTIONS);
     }
 
     private CharSequence html(String str) {

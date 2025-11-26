@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         binding.easyQuestionsButton.setOnClickListener(v -> {
+            repository.apiCall("easy", 10);
+
             startActivity(QuestionsActivity.questionsIntentFactory(
                     getApplicationContext(),
                     loggedInUserId,
@@ -77,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.normalQuestionsButton.setOnClickListener(v -> {
+            repository.apiCall("medium", 10);
+
             startActivity(QuestionsActivity.questionsIntentFactory(
                     getApplicationContext(),
                     loggedInUserId,
@@ -85,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.hardQuestionsButton.setOnClickListener(v -> {
+            repository.apiCall("hard", 10);
+
             startActivity(QuestionsActivity.questionsIntentFactory(
                     getApplicationContext(),
                     loggedInUserId,
