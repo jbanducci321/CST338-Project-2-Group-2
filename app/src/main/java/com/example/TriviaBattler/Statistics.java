@@ -111,8 +111,7 @@ public class Statistics extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.logout) {
-            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
-            finish();
+            logout();
             return true;
         } else if (id == R.id.stats) {
             Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);

@@ -1,7 +1,10 @@
 package com.example.TriviaBattler.database;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
@@ -163,13 +166,13 @@ public class AppRepository {
                         }
 
                         AppDatabase.databaseWriteExecutor.execute(() ->
-                                questionDAO.insertALL(toInsert)); //Calls insert all query directly from the dao
+                                questionDAO.insertALL(toInsert));
 
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
-                        //TODO: Add error handling to the api call (need to also handle potential errors in connected activities)
+                        Log.e("API_ERROR", "API call failed: " + t.getMessage(), t);
                     }
                 });
     }
