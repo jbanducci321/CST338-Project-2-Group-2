@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         binding.dailyQuestionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(getApplicationContext()));
+                startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(getApplicationContext(),loggedInUserId));
             }
         });
         binding.easyQuestionsButton.setOnClickListener(v -> {
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.admin) {
-            startActivity(AdminLanding.adminLandingIntentFactory(getApplicationContext()));
+            startActivity(AdminLanding.adminLandingIntentFactory(getApplicationContext(),loggedInUserId));
             return true;
         }
         return super.onOptionsItemSelected(item);

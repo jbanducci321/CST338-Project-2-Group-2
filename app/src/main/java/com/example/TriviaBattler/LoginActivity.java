@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void verifyUser() {
-        String username = binding.usernameLoginEditText.getText().toString().trim();
+        String username = binding.usernameLoginEditText.getText().toString().trim().toLowerCase();
         if (username.isEmpty()) {
             toastMaker("Please enter a username");
             return;
