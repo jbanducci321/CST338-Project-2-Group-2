@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -51,11 +52,32 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
             });
         }
 
-        binding.buttonTempSubmit.setOnClickListener(new View.OnClickListener() {
+        binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int amount = Integer.parseInt(binding.editTextTempNumberAmount.getText().toString().trim());
-                String difficulty = binding.editTextTempDifficulty.getText().toString().trim().toLowerCase();
+                int amount;
+                //Makes sure the entered number won't cause errors for the api call
+                try {
+                    amount = Integer.parseInt(binding.editTextNumberAmount.getText().toString().trim());
+                    if (amount <= 0) {
+                        toastMaker("Enter a number greater than 0");
+                        return;
+                    }
+                }
+                catch (NumberFormatException e) {
+                    toastMaker("Enter a valid number");
+                    return;
+                }
+
+                //Selects the difficulty of the questions being called
+                String difficulty = "easy"; //Default value for the radio buttons
+                int checkedButton = binding.radioGroupDifficulty.getCheckedRadioButtonId();
+                if (checkedButton == binding.rbMedium.getId()) {
+                    difficulty = "medium";
+                }
+                else if (checkedButton == binding.rbHard.getId()) {
+                    difficulty = "hard";
+                }
 
                 repository.apiCall(difficulty, amount);
             }
@@ -68,6 +90,10 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void toastMaker(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     static Intent addQuestionIntentFactory(Context context, int userId) {
