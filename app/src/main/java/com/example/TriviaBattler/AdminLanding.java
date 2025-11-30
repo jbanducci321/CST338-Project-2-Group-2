@@ -15,6 +15,9 @@ import com.example.TriviaBattler.database.entities.User;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class AdminLanding extends AppCompatActivity {
+
+    private static final String ADMIN_ACTIVITY_USER_ID = "com.example.labandroiddemo.ADMIN_ACTIVITY_USER_ID";
+
     private static final int LOGGED_OUT = -1;
     private int loggedInUserId = -LOGGED_OUT;
 
@@ -33,7 +36,7 @@ public class AdminLanding extends AppCompatActivity {
 
         repository = AppRepository.getRepository(getApplication());
 
-        int userId = getIntent().getIntExtra("USER_ID", -1);
+        int userId = getIntent().getIntExtra(ADMIN_ACTIVITY_USER_ID, -1);
         if (userId != -1) {
             LiveData<User> userObserver = repository.getUserByUserId(userId);
             userObserver.observe(this, u -> {
@@ -93,8 +96,9 @@ public class AdminLanding extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    static Intent adminLandingIntentFactory(Context context){
+    static Intent adminLandingIntentFactory(Context context, int loggedInUserId){
         Intent intent =new Intent(context, AdminLanding.class);
+        intent.putExtra(ADMIN_ACTIVITY_USER_ID, loggedInUserId);
         return intent;
     }
 }

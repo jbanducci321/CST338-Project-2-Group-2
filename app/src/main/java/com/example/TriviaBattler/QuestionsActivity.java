@@ -26,9 +26,6 @@ import java.util.Objects;
 
 public class QuestionsActivity extends AppCompatActivity {
 
-    private static final int LOGGED_OUT = -1;
-    private int loggedInUserId = -LOGGED_OUT;
-
     private AppRepository repository;
     private User user;
     private ActivityQuestionsBinding binding;
@@ -104,12 +101,11 @@ public class QuestionsActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.stats) {
-            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            Intent intent = Statistics.statsIntentFactory(this, userId);
             startActivity(intent);
             return true;
         }else if (id == R.id.admin) {
-            Intent intent = new Intent(this, AdminLanding.class);
-            startActivity(intent);
+            startActivity(AdminLanding.adminLandingIntentFactory(getApplicationContext(),userId));
             return true;
         }
 
