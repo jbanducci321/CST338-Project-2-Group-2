@@ -39,7 +39,9 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
         binding = ActivityAddQuestionsAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(findViewById(R.id.toolbar));
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         repository = AppRepository.getRepository(getApplication());

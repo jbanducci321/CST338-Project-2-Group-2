@@ -10,6 +10,9 @@ import androidx.room.Query;
 import com.example.TriviaBattler.database.AppDatabase;
 import com.example.TriviaBattler.database.entities.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Dao
 public interface UserDAO {
 
@@ -30,11 +33,16 @@ public interface UserDAO {
 
     //Sets a user, by their username, to an admin (allows for demotion as well)
     @Query("UPDATE " + AppDatabase.USER_TABLE + " SET isAdmin = :isAdmin WHERE username = :username")
-    void setAdminByUsername(String username, boolean isAdmin); //TODO: May want to have it return something to verify operation successful
+    Void setAdminByUsername(String username, boolean isAdmin); //TODO: May want to have it return something to verify operation successful
 
 
     //Checks if a username already exists (for account creation logic)
     @Query("SELECT EXISTS(SELECT 1 FROM " + AppDatabase.USER_TABLE + " WHERE username = :username)")
     boolean checkUsername(String username);
+
+    @Query("SELECT * from " + AppDatabase.USER_TABLE)
+    List<User> getAllUsers();
+
+
 
 }

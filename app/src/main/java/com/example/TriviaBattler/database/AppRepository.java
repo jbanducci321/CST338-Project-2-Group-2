@@ -83,6 +83,23 @@ public class AppRepository {
         return userDAO.getUserByUserId(userId);
     }
 
+    public ArrayList<User> getAllUsers(){
+        Future<ArrayList<User>> future = AppDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<User>>() {
+                    @Override
+                    public ArrayList<User> call() throws Exception {
+                        return (ArrayList<User>) userDAO.getAllUsers();
+                    }
+                });
+        try{
+            return future.get();
+        } catch (InterruptedException| ExecutionException e){
+            Log.i(MainActivity.TAG,"I don't know what to do to fix");
+        }
+        return null;
+
+    }
+
 
     public void setAdmin(String username, boolean isAdmin) { //Promote/demote a user as admin by their username
         AppDatabase.databaseWriteExecutor.execute(()->{
