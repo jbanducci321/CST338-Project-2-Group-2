@@ -93,13 +93,6 @@ public class MainActivity extends AppCompatActivity {
             ));
         });
 
-        binding.statisticsButton.setOnClickListener(view -> {
-            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
-            startActivity(intent);
-        });
-
-
-
     }
 
     //Menu inflater
