@@ -18,11 +18,11 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
-        android:id="@+id/daily_Question_Button"
+        android:id="@+id/addAdminButton"
         android:layout_width="232dp"
-        android:layout_height="124dp"
+        android:layout_height="75dp"
         android:layout_marginTop="84dp"
-        android:text="@string/edit_daily_question"
+        android:text="Add Admin"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -30,22 +30,34 @@
         app:layout_constraintTop_toBottomOf="@+id/welcome" />
 
     <Button
+        android:id="@+id/removeAdminButton"
+        android:layout_width="232dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="40dp"
+        android:text="Remove Admin"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addAdminButton" />
+
+    <Button
         android:id="@+id/edit_Statistics"
         android:layout_width="245dp"
-        android:layout_height="119dp"
+        android:layout_height="75dp"
         android:layout_marginTop="40dp"
         android:text="@string/edit_statistics"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/daily_Question_Button" />
+        app:layout_constraintTop_toBottomOf="@+id/removeAdminButton" />
 
     <Button
         android:id="@+id/buttonAddQuestions"
         android:layout_width="245dp"
-        android:layout_height="119dp"
+        android:layout_height="75dp"
         android:layout_marginTop="40dp"
-        android:text="Add questions to database"
+        android:text="Add Questions"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +82,7 @@
         android:layout_marginTop="24dp"
         android:text="adminName"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/daily_Question_Button"
+        app:layout_constraintBottom_toTopOf="@+id/addAdminButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome"

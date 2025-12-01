@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import com.example.TriviaBattler.database.AppRepository;
 import com.example.TriviaBattler.database.entities.User;
+import com.example.TriviaBattler.databinding.ActivityAdminLandingBinding;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class AdminLanding extends AppCompatActivity {
@@ -23,12 +24,14 @@ public class AdminLanding extends AppCompatActivity {
 
     private AppRepository repository;
     private User user;
+    private ActivityAdminLandingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_landing);
 
+        binding= ActivityAdminLandingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         //Menu things
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,9 +44,26 @@ public class AdminLanding extends AppCompatActivity {
             LiveData<User> userObserver = repository.getUserByUserId(userId);
             userObserver.observe(this, u -> {
                 user = u;
+                binding.adminUser.setText(user.getUsername());
                 if (user != null) invalidateOptionsMenu();
             });
         }
+
+        binding.addAdminButton.setOnClickListener(v -> {
+
+            startActivity(AddAdmin.addAdminIntentFactory(
+                    getApplicationContext(),
+                    loggedInUserId,true
+            ));
+        });
+        binding.removeAdminButton.setOnClickListener(v -> {
+
+            startActivity(AddAdmin.addAdminIntentFactory(
+                    getApplicationContext(),
+                    loggedInUserId,false
+            ));
+        });
+
     }
 
     //Menu Inflater
