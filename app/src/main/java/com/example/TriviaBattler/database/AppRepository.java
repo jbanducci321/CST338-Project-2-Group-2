@@ -23,14 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AppRepository {
-
     private final UserDAO userDAO;
     private final QuestionDAO questionDAO;
 
@@ -78,9 +79,20 @@ public class AppRepository {
         return userDAO.getUserByUserName(username);
     }
 
+    public void getUserByUserIdNotLive(int userId, Consumer<User> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            User user = userDAO.getUserByUserIdNotLive(userId);
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> callback.accept(user));
+        });
+
+    }
 
     public LiveData<User> getUserByUserId(int userId) {
         return userDAO.getUserByUserId(userId);
+    }
+    public LiveData<List<Stats>> getAllStatsLive() {
+        return statsDAO.getAllStatsLive();
     }
 
     public ArrayList<User> getAllUsers(){
