@@ -15,4 +15,11 @@ public interface ApiService {
             //@Query("type") String type
     );
 
+    @GET("api.php?type=multiple")
+    Call<ApiResponse> getQuestionCategory(
+            @Query("amount") int amount,
+            @Query("difficulty") String difficulty,
+            @Query("category") int category
+    );
+
 }

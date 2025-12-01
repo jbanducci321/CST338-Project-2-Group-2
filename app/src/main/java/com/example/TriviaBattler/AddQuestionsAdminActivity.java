@@ -63,8 +63,7 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
                         toastMaker("Enter a number greater than 0");
                         return;
                     }
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     toastMaker("Enter a valid number");
                     return;
                 }
@@ -74,12 +73,22 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
                 int checkedButton = binding.radioGroupDifficulty.getCheckedRadioButtonId();
                 if (checkedButton == binding.rbMedium.getId()) {
                     difficulty = "medium";
-                }
-                else if (checkedButton == binding.rbHard.getId()) {
+                } else if (checkedButton == binding.rbHard.getId()) {
                     difficulty = "hard";
                 }
 
-                repository.apiCall(difficulty, amount);
+                //Collects the category from the spinner
+                int spinnerPos = binding.spinnerCategory.getSelectedItemPosition();
+                int categoryId = mapCategoryPositionToId(spinnerPos);
+
+                boolean status = repository.apiCallAdminCategory(difficulty, amount, categoryId);
+
+                if (status) {
+                    toastMaker("Questions added successfully");
+                } else {
+                    toastMaker("Error adding question, try again");
+                }
+
             }
         });
 
@@ -95,6 +104,7 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
     private void toastMaker(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
 
     static Intent addQuestionIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, AddQuestionsAdminActivity.class);
@@ -148,7 +158,7 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
             Intent intent = Statistics.statsIntentFactory(this, userId);
             startActivity(intent);
             return true;
-        }else if (id == R.id.admin) {
+        } else if (id == R.id.admin) {
             startActivity(AdminLanding.adminLandingIntentFactory(getApplicationContext(), userId));
             return true;
         }
@@ -156,5 +166,62 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Helper method that maps the location of the text to its api category id
+    private int mapCategoryPositionToId(int position) {
+        switch (position) {
+            case 0:
+                return 0;   // Any Category
+            case 1:
+                return 9;   // General Knowledge
+            case 2:
+                return 10;  // Entertainment: Books
+            case 3:
+                return 11;  // Entertainment: Film
+            case 4:
+                return 12;  // Entertainment: Music
+            case 5:
+                return 13;  // Entertainment: Musicals & Theatres
+            case 6:
+                return 14;  // Entertainment: Television
+            case 7:
+                return 15;  // Entertainment: Video Games
+            case 8:
+                return 16;  // Entertainment: Board Games
+            case 9:
+                return 17;  // Science & Nature
+            case 10:
+                return 18;  // Science: Computers
+            case 11:
+                return 19;  // Science: Mathematics
+            case 12:
+                return 20;  // Mythology
+            case 13:
+                return 21;  // Sports
+            case 14:
+                return 22;  // Geography
+            case 15:
+                return 23;  // History
+            case 16:
+                return 24;  // Politics
+            case 17:
+                return 25;  // Art
+            case 18:
+                return 26;  // Celebrities
+            case 19:
+                return 27;  // Animals
+            case 20:
+                return 28;  // Vehicles
+            case 21:
+                return 29;  // Entertainment: Comics
+            case 22:
+                return 30;  // Science: Gadgets
+            case 23:
+                return 31;  // Entertainment: Japanese Anime & Manga
+            case 24:
+                return 32;  // Entertainment: Cartoon & Animations
+            default:
+                return 0;   // Fallback to Any Category
+        }
 
     }
+}

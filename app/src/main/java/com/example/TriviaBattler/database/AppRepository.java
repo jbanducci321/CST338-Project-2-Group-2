@@ -176,4 +176,38 @@ public class AppRepository {
                     }
                 });
     }
+
+    //An api call used in the add question activity that lets you select category
+    public boolean apiCallAdminCategory(String difficulty, int amount, int categoryId) {
+        try {
+            ApiClient.getService()
+                    .getQuestionCategory(amount, difficulty, categoryId)
+                    .enqueue(new Callback<ApiResponse>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                            List<Question> toInsert = new ArrayList<>();
+
+                            assert response.body() != null;
+                            for (ApiQuestion dto : response.body().results) {
+                                toInsert.add(new Question(dto.type, dto.difficulty, dto.category, dto.question,
+                                        dto.correct_answer, dto.incorrect_answers));
+                            }
+
+                            AppDatabase.databaseWriteExecutor.execute(() ->
+                                    questionDAO.insertALL(toInsert));
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse> call, Throwable t) {
+                            Log.e("API_ERROR", "API call failed: " + t.getMessage(), t);
+                        }
+                    });
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
 }
