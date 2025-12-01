@@ -2,76 +2,76 @@ package com.example.TriviaBattler;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.TriviaBattler.database.AppRepository;
 import com.example.TriviaBattler.database.entities.User;
-import com.example.TriviaBattler.databinding.ActivityAdminLandingBinding;
+import com.example.TriviaBattler.databinding.ActivityAddAdminBinding;
+import com.example.TriviaBattler.databinding.ActivityAdminStatsBinding;
+import com.example.TriviaBattler.viewHolder.StatisticsViewModel;
+import com.example.TriviaBattler.viewHolder.StatsAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class AdminLanding extends AppCompatActivity {
-
-    private static final String ADMIN_ACTIVITY_USER_ID = "com.example.labandroiddemo.ADMIN_ACTIVITY_USER_ID";
-
-    private static final int LOGGED_OUT = -1;
-    private int loggedInUserId = -LOGGED_OUT;
-
-    private AppRepository repository;
+public class AdminStats extends AppCompatActivity {
+    private static final String ADMIN_STATS_ACTIVITY_USER_ID = "com.example.labandroiddemo.ADMIN_STATS_ACTIVITY_USER_ID";
+    private ActivityAdminStatsBinding binding;
     private User user;
-    private ActivityAdminLandingBinding binding;
+    private Integer userId;
+    private AppRepository repository;
+    private StatisticsViewModel statisticsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding= ActivityAdminLandingBinding.inflate(getLayoutInflater());
+        binding= ActivityAdminStatsBinding.inflate(getLayoutInflater());
+        repository = AppRepository.getRepository(getApplication());
         setContentView(binding.getRoot());
-        //Menu things
+
+        statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
+        RecyclerView recyclerView = binding.allStatsRecyclerView;
+        final StatsAdapter adapter = new StatsAdapter(new StatsAdapter.StatsDiff(),getApplication());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        repository = AppRepository.getRepository(getApplication());
 
-        int userId = getIntent().getIntExtra(ADMIN_ACTIVITY_USER_ID, -1);
+
+        userId = getIntent().getIntExtra(ADMIN_STATS_ACTIVITY_USER_ID, -1);
         if (userId != -1) {
             LiveData<User> userObserver = repository.getUserByUserId(userId);
             userObserver.observe(this, u -> {
                 user = u;
-                binding.adminUser.setText(user.getUsername());
+
                 if (user != null) invalidateOptionsMenu();
             });
         }
 
-        binding.addAdminButton.setOnClickListener(v -> {
+        statisticsViewModel.getAllStatsLive().observe(this, adapter::submitList);
 
-            startActivity(AddAdmin.addAdminIntentFactory(
-                    getApplicationContext(),
-                    loggedInUserId,true
-            ));
-        });
-        binding.removeAdminButton.setOnClickListener(v -> {
+    }
 
-            startActivity(AddAdmin.addAdminIntentFactory(
-                    getApplicationContext(),
-                    loggedInUserId,false
-            ));
-        });
-        binding.editStatistics.setOnClickListener(v -> {
-
-            startActivity(AdminStats.adminStatsIntentFactory(
-                    getApplicationContext(),
-                    loggedInUserId
-            ));
-        });
-
+    static Intent adminStatsIntentFactory(Context context, int loggedInUserId){
+        Intent intent =new Intent(context, AdminStats.class);
+        intent.putExtra(ADMIN_STATS_ACTIVITY_USER_ID, loggedInUserId);
+        return intent;
     }
 
     //Menu Inflater
@@ -113,26 +113,20 @@ public class AdminLanding extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.logout) {
-            logout();
+            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+            finish();
             return true;
         } else if (id == R.id.stats) {
-            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            Intent intent = Statistics.statsIntentFactory(this, userId);
             startActivity(intent);
+            return true;
+        }else if (id == R.id.admin) {
+            startActivity(AdminLanding.adminLandingIntentFactory(getApplicationContext(),userId));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-    static Intent adminLandingIntentFactory(Context context, int loggedInUserId){
-        Intent intent =new Intent(context, AdminLanding.class);
-        intent.putExtra(ADMIN_ACTIVITY_USER_ID, loggedInUserId);
-        return intent;
-    }
-    private void logout() {
-        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
-        sp.edit().putInt(getString(R.string.preference_userId_key), LOGGED_OUT).apply();
-        Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
-        startActivity(intent);
-        finish();
-    }
+
+
 }

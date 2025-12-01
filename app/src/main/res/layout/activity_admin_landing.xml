@@ -46,7 +46,7 @@
         android:layout_width="245dp"
         android:layout_height="75dp"
         android:layout_marginTop="40dp"
-        android:text="@string/edit_statistics"
+        android:text="View All Statistics"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

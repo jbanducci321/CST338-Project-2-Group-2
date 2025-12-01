@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         updateSharedPreference();
     }
 
-    private void logout() {
+    public void logout() {
         loggedInUserId = LOGGED_OUT;
         updateSharedPreference();
         getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);

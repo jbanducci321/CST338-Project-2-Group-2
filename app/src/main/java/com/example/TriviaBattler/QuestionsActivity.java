@@ -2,6 +2,7 @@ package com.example.TriviaBattler;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import com.example.TriviaBattler.database.AppRepository;
 import com.example.TriviaBattler.database.entities.Question;
 import com.example.TriviaBattler.database.entities.User;
 import com.example.TriviaBattler.databinding.ActivityQuestionsBinding;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class QuestionsActivity extends AppCompatActivity {
+    private static final int LOGGED_OUT = -1;
 
     private AppRepository repository;
     private User user;
@@ -46,12 +49,21 @@ public class QuestionsActivity extends AppCompatActivity {
         binding = ActivityQuestionsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(findViewById(R.id.toolbar));
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         repository = AppRepository.getRepository(getApplication());
 
         userId = getIntent().getIntExtra(EXTRA_USER_ID, -1);
+        if (userId != -1) {
+            LiveData<User> userObserver = repository.getUserByUserId(userId);
+            userObserver.observe(this, u -> {
+                user = u;
+
+                if (user != null) invalidateOptionsMenu();
+            });
+        }
         difficulty = getIntent().getStringExtra(EXTRA_DIFFICULTY);
 
         updateQuestionCountDisplay();
@@ -97,8 +109,7 @@ public class QuestionsActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.logout) {
-            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
-            finish();
+            logout();
             return true;
         } else if (id == R.id.stats) {
             Intent intent = Statistics.statsIntentFactory(this, userId);
@@ -198,5 +209,12 @@ public class QuestionsActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_USER_ID, userId);
         intent.putExtra(EXTRA_DIFFICULTY, difficulty);
         return intent;
+    }
+    private void logout() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        sp.edit().putInt(getString(R.string.preference_userId_key), LOGGED_OUT).apply();
+        Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
+        startActivity(intent);
+        finish();
     }
 }

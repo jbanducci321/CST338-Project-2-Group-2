@@ -6,6 +6,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.TriviaBattler.database.AppDatabase;
+import com.example.TriviaBattler.database.AppRepository;
 
 @Entity(tableName = AppDatabase.STATS_TABLE,
         foreignKeys = @ForeignKey(
@@ -82,5 +83,13 @@ public class Stats {
 
     public void setOverallScore(double overallScore) {
         this.overallScore = overallScore;
+    }
+
+    @Override
+    public String toString() {
+        return  "Correct Count=" + correctCount +"\n\t"+
+                "Wrong Count=" + wrongCount +"\n\t"+
+                "Total Count=" + totalCount +"\n\t"+
+                "Oververall Score=" + overallScore+"\n";
     }
 }

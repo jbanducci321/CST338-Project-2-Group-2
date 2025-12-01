@@ -9,6 +9,9 @@ import androidx.room.Update;
 
 import com.example.TriviaBattler.database.AppDatabase;
 import com.example.TriviaBattler.database.entities.Stats;
+import com.example.TriviaBattler.database.entities.User;
+
+import java.util.List;
 
 @Dao
 public interface StatsDAO {
@@ -38,5 +41,8 @@ public interface StatsDAO {
 
     @Query("DELETE FROM " + AppDatabase.STATS_TABLE + " WHERE userId = :userId")
     void deleteForUser(int userId);
+
+    @Query("SELECT * from " + AppDatabase.STATS_TABLE)
+    LiveData<List<Stats>> getAllStatsLive();
 
 }
