@@ -94,13 +94,6 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
             }
         });
 
-        binding.buttonTempBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), userId));
-            }
-        });
-
     }
 
     private void toastMaker(String msg) {

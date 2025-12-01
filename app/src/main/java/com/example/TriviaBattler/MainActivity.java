@@ -62,12 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         updateSharedPreference();
 
-        binding.dailyQuestionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(getApplicationContext(),loggedInUserId));
-            }
-        });
+
         binding.easyQuestionsButton.setOnClickListener(v -> {
             repository.apiCall("easy", 10);
 

@@ -72,6 +72,13 @@ public class AdminLanding extends AppCompatActivity {
             ));
         });
 
+        binding.buttonAddQuestions.setOnClickListener(v -> {
+            startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(
+                    getApplicationContext(),
+                    loggedInUserId
+            ));
+        });
+
     }
 
     //Menu Inflater

@@ -33,7 +33,7 @@
         android:id="@+id/welcomeUserTextView"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="90dp"
         android:gravity="center"
         android:text="Welcome\nUsername!"
         android:textSize="24sp"
@@ -44,30 +44,21 @@
     <TextView
         android:id="@+id/practiceModeTextView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="75dp"
         android:gravity="center"
-        android:text="Practice Mode:"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dailyQuestionsButton" />
-
-    <Button
-        android:id="@+id/dailyQuestionsButton"
-        android:layout_margin="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="Add Questions (temp)"
-        android:textSize="24sp"
+        android:text="TRIVIA TIME!!!"
+        android:textSize="32sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeUserTextView" />
+
 
     <Button
         android:id="@+id/easyQuestionsButton"
         android:layout_width="match_parent"
         android:layout_margin="10dp"
-        android:layout_height="50dp"
+        android:layout_height="75dp"
         android:text="Easy Questions"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +69,7 @@
         android:id="@+id/normalQuestionsButton"
         android:layout_width="match_parent"
         android:layout_margin="10dp"
-        android:layout_height="50dp"
+        android:layout_height="75dp"
         android:text="Normal Questions"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +80,7 @@
         android:id="@+id/hardQuestionsButton"
         android:layout_width="match_parent"
         android:layout_margin="10dp"
-        android:layout_height="50dp"
+        android:layout_height="75dp"
         android:text="Hard Questions"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
