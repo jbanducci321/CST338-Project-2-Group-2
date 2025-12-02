@@ -50,7 +50,9 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
             LiveData<User> userObserver = repository.getUserByUserId(userId);
             userObserver.observe(this, u -> {
                 user = u;
-                if (user != null) invalidateOptionsMenu();
+                if (user != null) {
+                    invalidateOptionsMenu();
+                }
             });
         }
 

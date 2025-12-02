@@ -55,7 +55,7 @@
     <TextView
         android:id="@+id/adminsTextView"
         android:layout_width="match_parent"
-        android:layout_height="150dip"
+        android:layout_height="275dp"
         android:gravity="center"
         android:text="current non-admins"
         android:textSize="32sp"

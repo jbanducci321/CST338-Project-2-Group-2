@@ -23,6 +23,7 @@ public class AdminLanding extends AppCompatActivity {
     private static final int LOGGED_OUT = -1;
     private int loggedInUserId = -LOGGED_OUT;
 
+    private int userId;
     private AppRepository repository;
     private User user;
     private ActivityAdminLandingBinding binding;
@@ -40,13 +41,16 @@ public class AdminLanding extends AppCompatActivity {
 
         repository = AppRepository.getRepository(getApplication());
 
-        int userId = getIntent().getIntExtra(ADMIN_ACTIVITY_USER_ID, -1);
+        userId = getIntent().getIntExtra(ADMIN_ACTIVITY_USER_ID, -1);
         if (userId != -1) {
             LiveData<User> userObserver = repository.getUserByUserId(userId);
             userObserver.observe(this, u -> {
                 user = u;
                 binding.adminUser.setText(user.getUsername());
-                if (user != null) invalidateOptionsMenu();
+                if (user != null) {
+                    userId = user.getUserId();
+                    invalidateOptionsMenu();
+                }
             });
         }
 
@@ -54,28 +58,28 @@ public class AdminLanding extends AppCompatActivity {
 
             startActivity(AddAdmin.addAdminIntentFactory(
                     getApplicationContext(),
-                    loggedInUserId,true
+                    userId,true
             ));
         });
         binding.removeAdminButton.setOnClickListener(v -> {
 
             startActivity(AddAdmin.addAdminIntentFactory(
                     getApplicationContext(),
-                    loggedInUserId,false
+                    userId,false
             ));
         });
         binding.editStatistics.setOnClickListener(v -> {
 
             startActivity(AdminStats.adminStatsIntentFactory(
                     getApplicationContext(),
-                    loggedInUserId
+                    userId
             ));
         });
 
         binding.buttonAddQuestions.setOnClickListener(v -> {
             startActivity(AddQuestionsAdminActivity.addQuestionIntentFactory(
                     getApplicationContext(),
-                    loggedInUserId
+                    userId
             ));
         });
 
@@ -123,7 +127,7 @@ public class AdminLanding extends AppCompatActivity {
             logout();
             return true;
         } else if (id == R.id.stats) {
-            Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
+            Intent intent = Statistics.statsIntentFactory(this, userId);
             startActivity(intent);
             return true;
         }

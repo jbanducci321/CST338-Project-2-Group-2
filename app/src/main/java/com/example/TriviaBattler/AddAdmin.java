@@ -2,7 +2,9 @@ package com.example.TriviaBattler;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,16 +29,18 @@ public class AddAdmin extends AppCompatActivity {
     private static final String ADD_ADMIN_ACTIVITY_USER_ID = "com.example.labandroiddemo.ADD_ADMIN_ACTIVITY_USER_ID";
     private ActivityAddAdminBinding binding;
     private User user;
-    private Integer userId;
+    private int userId;
     private AppRepository repository;
     private boolean newIsAdmin;
-    private static final String MODIFY_ADMIN_ACTIVITY_NEW_BOOLEAN="com.example.labandroiddemo.ADD_ADMIN_ACTIVITY_USER_ID";
+
+    private static final String MODIFY_ADMIN_ACTIVITY_NEW_BOOLEAN="com.example.labandroiddemo.MODIFY_ADMIN_ACTIVITY_USER_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityAddAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -49,9 +53,13 @@ public class AddAdmin extends AppCompatActivity {
             userObserver.observe(this, u -> {
                 user = u;
 
-                if (user != null) invalidateOptionsMenu();
+                if (user != null){
+                    userId=user.getUserId();
+                    invalidateOptionsMenu();
+                }
             });
         }
+        binding.adminsTextView.setMovementMethod(new ScrollingMovementMethod());
         newIsAdmin=getIntent().getBooleanExtra(MODIFY_ADMIN_ACTIVITY_NEW_BOOLEAN,false);
         updateDisplayedUsers();
         binding.searchUsername.setOnClickListener(new View.OnClickListener() {
@@ -62,20 +70,11 @@ public class AddAdmin extends AppCompatActivity {
                     toastMaker("Please enter a username");
                     binding.usernameEditText.setText("");
                     return;
+                }else {
+                    modifyAdmin(search);
                 }
-                LiveData<User> observer = repository.getUserByUserName(search);
-                observer.observe(AddAdmin.this, u -> {
-                    if (u != null) {
-                        repository.setAdmin(u.getUsername(), newIsAdmin);
-                        updateDisplayedUsers();
-                        toastMaker(String.format("%s is now a %s.", u.getUsername(), newIsAdmin ? "admin" : "non-admin"));
-                        }
-                    else {
-                        toastMaker(String.format("%s is not a valid username.", search));
-                        binding.usernameEditText.setText("");
-                    }
-                });
 
+                binding.usernameEditText.setText("");
             }
 
 
@@ -154,8 +153,7 @@ public class AddAdmin extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.logout) {
-            startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
-            finish();
+            logout();
             return true;
         } else if (id == R.id.stats) {
             Intent intent = Statistics.statsIntentFactory(this, userId);
@@ -167,6 +165,33 @@ public class AddAdmin extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private void logout() {
+        SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        sp.edit().putInt(getString(R.string.preference_userId_key), -1).apply();
+        Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
+        startActivity(intent);
+        finish();
+    }
+
+    private void modifyAdmin(String search) {
+        LiveData<User> observer = repository.getUserByUserName(search);
+                    observer.observe(AddAdmin.this, u -> {
+            if (u != null && u.getUserId() != userId) {
+                repository.setAdmin(u.getUsername(), newIsAdmin);
+                updateDisplayedUsers();
+                toastMaker(String.format("%s is now a %s.", search.toLowerCase(), newIsAdmin ? "admin" : "non-admin"));
+                binding.usernameEditText.setText("");
+            } else if (u != null && u.getUserId() == userId) {
+                toastMaker("Cannot modify current user.");
+                binding.usernameEditText.setText("");
+            } else {
+                toastMaker(String.format("%s is not a valid username.", search));
+                binding.usernameEditText.setText("");
+            }
+            observer.removeObservers(AddAdmin.this);
+        });
+
     }
 
 }

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_DIFFICULTY = "EXTRA_DIFFICULTY";
 
-    private int loggedInUserId = -LOGGED_OUT;
+    private int loggedInUserId = LOGGED_OUT;
     private User user;
 
     public static final String TAG = "DAC_APP";
