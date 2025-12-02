@@ -60,7 +60,7 @@ public class Statistics extends AppCompatActivity {
                 correctTv.setText(String.valueOf(s.getCorrectCount()));
                 incorrectTv.setText(String.valueOf(s.getWrongCount()));
                 totalTv.setText(String.valueOf(s.getTotalCount()));
-                questionScoreTv.setText(String.format(java.util.Locale.US, "%.1f%%", s.getOverallScore()));
+                questionScoreTv.setText(String.format(java.util.Locale.US, "%.2f%%", s.getOverallScore()));
             });
         }
 
@@ -135,6 +135,25 @@ public class Statistics extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public String toString() {
+        return "Correct Count=" + correctTv +
+                "\nWrong Count=" + incorrectTv +
+                "\nTotal Count=" + totalTv +
+                "\nOverall Score=" + String.format("%.2f", questionScoreTv);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Statistics that = (Statistics) o;
+        return loggedInUserId == that.loggedInUserId && Objects.equals(repository, that.repository) && Objects.equals(user, that.user) && Objects.equals(correctTv, that.correctTv) && Objects.equals(incorrectTv, that.incorrectTv) && Objects.equals(totalTv, that.totalTv) && Objects.equals(questionScoreTv, that.questionScoreTv);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(repository, user, loggedInUserId, correctTv, incorrectTv, totalTv, questionScoreTv);
+    }
 
     static Intent statsIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, Statistics.class);
