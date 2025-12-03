@@ -37,6 +37,10 @@ public class Stats {
         overallScore = 0.0;
     }
 
+    /**
+     * sets and gets
+     * @return sets and gets
+     */
     public int getStatsId() {
         return statsId;
     }

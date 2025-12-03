@@ -16,15 +16,36 @@ import java.util.ArrayList;
 
 public class StatsAdapter extends ListAdapter<Stats, StatsViewHolder> {
     private AppRepository repository;
+
+    /**
+     * Stats adapter
+     * @param diffCallback call back
+     * @param application application
+     */
     public StatsAdapter(@NonNull DiffUtil.ItemCallback<Stats> diffCallback,Application application) {
         super(diffCallback);
         this.repository = AppRepository.getRepository(application);
     }
 
+    /**
+     * view holder
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return create
+     */
+
     @Override
     public StatsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return StatsViewHolder.create(parent);
     }
+
+    /**
+     * view holder
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
 
     @Override
     public void onBindViewHolder(@NonNull StatsViewHolder holder, int position) {
@@ -45,11 +66,24 @@ public class StatsAdapter extends ListAdapter<Stats, StatsViewHolder> {
     }
 
     public static class StatsDiff extends DiffUtil.ItemCallback<Stats> {
+
+        /**
+         * contents same
+         * @param oldItem The item in the old list.
+         * @param newItem The item in the new list.
+         * @return items equal
+         */
         @Override
         public boolean areContentsTheSame(@NonNull Stats oldItem, @NonNull Stats newItem) {
             return oldItem.equals(newItem);
         }
 
+        /**
+         * are they same?
+         * @param oldItem The item in the old list.
+         * @param newItem The item in the new list.
+         * @return if equals
+         */
         @Override
         public boolean areItemsTheSame(@NonNull Stats oldItem, @NonNull Stats newItem) {
             return oldItem==newItem;

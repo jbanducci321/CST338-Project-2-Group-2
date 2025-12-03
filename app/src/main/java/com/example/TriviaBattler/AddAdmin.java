@@ -35,6 +35,13 @@ public class AddAdmin extends AppCompatActivity {
 
     private static final String MODIFY_ADMIN_ACTIVITY_NEW_BOOLEAN="com.example.labandroiddemo.MODIFY_ADMIN_ACTIVITY_USER_ID";
 
+    /**
+     * Create!
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +89,9 @@ public class AddAdmin extends AppCompatActivity {
 
     }
 
-
+    /**
+     * display users
+     */
     private void updateDisplayedUsers(){
         String listOfUsers="";
         List<User> repoList = repository.getAllUsers();
@@ -103,10 +112,22 @@ public class AddAdmin extends AppCompatActivity {
             binding.adminsTextView.setText(listOfUsers);
         }
     }
+
+    /**
+     * Toast
+     * @param message a toast
+     */
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * admin intent
+     * @param context a context
+     * @param loggedInUserId user is logged in
+     * @param newIsAdmin admin
+     * @return intent
+     */
     static Intent addAdminIntentFactory(Context context, int loggedInUserId, boolean newIsAdmin){
         Intent intent =new Intent(context, AddAdmin.class);
         intent.putExtra(ADD_ADMIN_ACTIVITY_USER_ID, loggedInUserId);
@@ -114,14 +135,25 @@ public class AddAdmin extends AppCompatActivity {
         return intent;
     }
 
-    //Menu Inflater
+    /**
+     * Menu Inflater
+     * @param menu The options menu in which you place your items.
+     *
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
-    //Visibility of menu items
+    /**
+     * Visibility of menu items
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     *
+     * @return true
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -144,7 +176,12 @@ public class AddAdmin extends AppCompatActivity {
         return true;
     }
 
-    //Options for menu
+    /**
+     * options on menu
+     * @param item The menu item that was selected.
+     *
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -166,6 +203,10 @@ public class AddAdmin extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * logout function
+     */
     private void logout() {
         SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         sp.edit().putInt(getString(R.string.preference_userId_key), -1).apply();
@@ -174,6 +215,10 @@ public class AddAdmin extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Admin or not
+     * @param search for usernames
+     */
     private void modifyAdmin(String search) {
         LiveData<User> observer = repository.getUserByUserName(search);
                     observer.observe(AddAdmin.this, u -> {

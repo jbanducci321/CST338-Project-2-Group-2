@@ -33,6 +33,13 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
     private ActivityAddQuestionsAdminBinding binding;
     private AppRepository repository;
 
+    /**
+     * Buttons and Create
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,25 +105,47 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * toast
+     * @param msg very toasty
+     */
     private void toastMaker(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 
+    /**
+     * Intent Factory
+     * @param context context
+     * @param userId a users id
+     * @return intent
+     */
     static Intent addQuestionIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, AddQuestionsAdminActivity.class);
         intent.putExtra(ADD_QUESTION_ACTIVITY_USER_ID, userId);
         return intent;
     }
 
-    //Menu Inflater
+    /**
+     * Menu Inflater
+     * @param menu The options menu in which you place your items.
+     *
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
-    //Visibility of menu items
+    /**
+     * Visibility of menu items
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     *
+     * @return true
+     */
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -139,7 +168,13 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
         return true;
     }
 
-    //Options for menu
+    /**
+     * options for menu
+     * @param item The menu item that was selected.
+     *
+     * @return true
+     */
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -163,7 +198,11 @@ public class AddQuestionsAdminActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Helper method that maps the location of the text to its api category id
+    /**
+     * Helper method that maps the location of the text to its api category id
+     * @param position a number
+     * @return a category
+     */
     private int mapCategoryPositionToId(int position) {
         switch (position) {
             case 0:

@@ -35,6 +35,13 @@ public class AdminStats extends AppCompatActivity {
     private AppRepository repository;
     private StatisticsViewModel statisticsViewModel;
 
+    /**
+     * Create!
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,20 +75,37 @@ public class AdminStats extends AppCompatActivity {
 
     }
 
+    /**
+     * intent factory
+     * @param context context
+     * @param loggedInUserId logged in user
+     * @return abstract idea of intent
+     */
     static Intent adminStatsIntentFactory(Context context, int loggedInUserId){
         Intent intent =new Intent(context, AdminStats.class);
         intent.putExtra(ADMIN_STATS_ACTIVITY_USER_ID, loggedInUserId);
         return intent;
     }
 
-    //Menu Inflater
+    /**
+     * menu inflater
+     * @param menu The options menu in which you place your items.
+     *
+     * @return true or false
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
-    //Visibility of menu items
+    /**
+     * visibility for menu
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     *
+     * @return true or false
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -104,7 +128,12 @@ public class AdminStats extends AppCompatActivity {
         return true;
     }
 
-    //Options for menu
+    /**
+     * Options for menu
+     * @param item The menu item that was selected.
+     *
+     * @return true or false
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

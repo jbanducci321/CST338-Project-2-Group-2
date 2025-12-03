@@ -42,6 +42,11 @@ public abstract class AppDatabase extends RoomDatabase {
 
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
+    /**
+     * get database
+     * @param context context
+     * @return instance
+     */
     static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -103,7 +108,7 @@ public abstract class AppDatabase extends RoomDatabase {
         //Ensures trigger exists (ran into errors and this fixed it)
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            // Ensure trigger exists even if DB was created earlier (helps during iterative dev).
+            // Ensure trigger exists even if DB was created earlier.
             db.execSQL(
                     "CREATE TRIGGER IF NOT EXISTS trg_after_user_insert " +
                             "AFTER INSERT ON " + USER_TABLE + " " +
