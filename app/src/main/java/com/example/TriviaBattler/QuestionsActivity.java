@@ -51,6 +51,13 @@ public class QuestionsActivity extends AppCompatActivity {
 
     private int defaultColor;
 
+    /***
+     * Sets up Toolbar, Options Menu dropdown, and prepares the first question.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,14 +95,25 @@ public class QuestionsActivity extends AppCompatActivity {
         displayQuestion(difficulty);
     }
 
-    //Menu Inflater
+    /***
+     * Menu inflater.
+     * @param menu The options menu in which you place your items.
+     *
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
-    //Visibility of menu items
+
+    /***
+     * Prepares the Options Menu dropdown selection depending on the logged-in user.
+     *
+     * @param menu The options menu as last shown or first initialized by onCreateOptionsMenu().
+     * @return true
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -121,7 +139,13 @@ public class QuestionsActivity extends AppCompatActivity {
         return true;
     }
 
-    //Options for menu
+
+    /***
+     * Processes Options Menu dropdown selection.
+     *
+     * @param item The menu item that was selected.
+     * @return false to allow normal menu processing to proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -145,9 +169,10 @@ public class QuestionsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Displays a random question by difficulty and sets answer controls.
-     * @param difficulty Difficulty level used to fetch a question.
+    /***
+     * Sets up question to be asked and answers.
+     *
+     * @param difficulty difficulty level of questions set (easy, normal, hard)
      */
     private void displayQuestion(String difficulty) {
         // Kill question observers
@@ -194,8 +219,8 @@ public class QuestionsActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Removes click listeners from all answer buttons.
+    /***
+     * Clears click listeners for all buttons.
      */
     private void clearAnswerClickListeners() {
         binding.textViewA.setOnClickListener(null);
@@ -204,10 +229,12 @@ public class QuestionsActivity extends AppCompatActivity {
         binding.textViewD.setOnClickListener(null);
     }
 
-    /**
-     * Handles answer selection, updates score, and loads the next question.
-     * @param button The pressed answer button.
-     * @param correctAnswer The correct answer text.
+    /***
+     * Checks if the answer the user selected was correct or not.<br>
+     * It notifies the user of their choice. Also prepares the next question or ends the quiz.
+     *
+     * @param button the button the user clicked.
+     * @param correctAnswer the correct answer for the current question.
      */
     private void answerClick(Button button, String correctAnswer) {
         // Depending on answer, notify user if it's correct or not
@@ -245,37 +272,42 @@ public class QuestionsActivity extends AppCompatActivity {
         }, 1000);
     }
 
-    /**
-     * Updates the on-screen question counter display.
+    /***
+     * Updates the current question number UI element.
      */
     private void updateQuestionCountDisplay() {
         TextView countView = findViewById(R.id.questionCount);
         countView.setText(currentQuestionIndex + "/" + TOTAL_QUESTIONS);
     }
 
-    /**
-     * Converts HTML-formatted text into a displayable CharSequence.
-     * @param str Raw HTML string to convert.
+    /***
+     * Converts HTML String to text for button UI.
+     *
+     * @param str HTML text
+     * @return Converted text
      */
     private CharSequence html(String str) {
         if (str == null) str = "";
         return HtmlCompat.fromHtml(str, HtmlCompat.FROM_HTML_MODE_LEGACY);
     }
 
-    /**
-     * Shows a short toast message.
-     * @param message Text to display in the toast.
+
+    /***
+     * Displays a toast on screen for the short amount of duration.
+     *
+     * @param message the message to be displayed
      */
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Creates an intent for launching the Questions activity.
-     * @param context Context used to build the intent.
-     * @param userId User ID passed to the activity.
-     * @param difficulty Chosen difficulty level.
-     * @return Intent configured for QuestionsActivity.
+    /***
+     * Creates a new Intent for the Questions Activity.
+     *
+     * @param context the application context
+     * @param userId the logged-in user's ID
+     * @param difficulty the difficulty level of question set
+     * @return the new Intent
      */
     static Intent questionsIntentFactory(Context context, int userId, String difficulty) {
         Intent intent = new Intent(context, QuestionsActivity.class);
@@ -284,8 +316,9 @@ public class QuestionsActivity extends AppCompatActivity {
         return intent;
     }
 
-    /**
-     * Logs out the user and returns to the login screen.
+    /***
+     * Logs out the currently logged-in user.<br>
+     * Goes back to the Login Activity.
      */
     private void logout() {
         SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);

@@ -41,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
 
     String preference_file_key = "preference_file_key";
 
+    /***
+     * Checks if user is logged-in. If not, starts Login Activity.<br>
+     * Else, set up toolbar, Option Menu dropdown, and button on clickers.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -65,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         updateSharedPreference();
 
-
+        // Button on click listeners
         binding.easyQuestionsButton.setOnClickListener(v -> {
             repository.apiCall("easy", 10);
 
@@ -98,14 +106,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Menu inflater
+    /***
+     * Menu inflater.
+     * @param menu The options menu in which you place your items.
+     *
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
-    //Options for dropdown visible or not
+
+    /***
+     * Prepares the Options Menu dropdown selection depending on the logged-in user.
+     *
+     * @param menu The options menu as last shown or first initialized by onCreateOptionsMenu().
+     * @return true
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -133,11 +152,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    //Oh, where the options can take you
+    /***
+     * Processes Options Menu dropdown selection.
+     *
+     * @param item The menu item that was selected.
+     * @return false to allow normal menu processing to proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.logout) { logout(); return true; }
+
+        if (id == R.id.logout) {
+            logout();
+            return true;
+        }
         else if (id == R.id.stats) {
             Intent intent = Statistics.statsIntentFactory(this, loggedInUserId);
             startActivity(intent);
@@ -150,6 +178,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /***
+     * Sets up the user role text and greets the user.
+     * @param savedInstanceState optional state bundle containing a previously saved user ID may be {@code null}.
+     */
     public void loginUser(Bundle savedInstanceState) {
         // === GymLog-style userId retrieval order: SharedPrefs -> savedInstance -> Intent ===
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
@@ -182,15 +214,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
-        updateSharedPreference();
-    }
-
-    /**
-     * Logs out the current user and returns to the login screen.
+    /***
+     * Logs out the currently logged-in user.<br>
+     * Goes back to the Login Activity.
      */
     public void logout() {
         loggedInUserId = LOGGED_OUT;
@@ -200,8 +226,21 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    /**
-     * Updates stored userId in shared preferences.
+
+    /***
+     * Saves activity state.
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
+        updateSharedPreference();
+    }
+
+    /***
+     * Updates shared preferences.
      */
     private void updateSharedPreference() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
@@ -211,13 +250,21 @@ public class MainActivity extends AppCompatActivity {
         sharedPrefEditor.apply();
     }
 
-    // GymLog-style intent factory
+    /***
+     * Creates a new Intent for the Main Activity.
+     *
+     * @param context the application context
+     * @param userId the logged-in user's ID
+     * @return the new Intent
+     */
     static Intent mainActivityIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
         return intent;
     }
 
+
+    /*
     public static class UserLandingPage extends AppCompatActivity {
 
         @Override
@@ -232,4 +279,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+    */
 }

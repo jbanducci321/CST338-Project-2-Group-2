@@ -31,6 +31,14 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private AppRepository repository;
 
+    /***
+     * Starts Main Activity if the user is already logged in.<br>
+     * Else, sets up on clickers for the 'Login' button and 'Create New Account' button
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -57,9 +65,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Logs in the user using stored or passed userId values.
-     * @param savedInstanceState Restored data containing a previous userId, if available.
+    /***
+     * Checks if the user is already logged in.<br>
+     * Starts the Main Activity if the user is logged in.<br>
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
      */
     public void loginUser(Bundle savedInstanceState) {
         // === GymLog-style userId retrieval order: SharedPrefs -> savedInstance -> Intent ===
@@ -76,15 +88,18 @@ public class LoginActivity extends AppCompatActivity {
 
         if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
-        }else{
+        }
+        else {
             startActivity(MainActivity
                     .mainActivityIntentFactory(getApplicationContext(), loggedInUserId));
         }
 
     }
 
-    /**
-     * Verifies login credentials and signs in valid users.
+    /***
+     * Checks if the username and password that was given is valid.<br>
+     * Valid being not empty, and in the database.<br><br>
+     * If valid, Main Activity is started.
      */
     private void verifyUser() {
         String username = binding.usernameLoginEditText.getText().toString().trim().toLowerCase();
@@ -112,17 +127,20 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Displays a short toast message.
-     * @param message Text to show in the toast.
+    /***
+     * Displays a toast on screen for the short amount of duration
+     *
+     * @param message the message to be displayed
      */
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Creates an intent for launching this activity.
-     * @param context Context used to build the intent.
+    /***
+     * Creates a new Intent for the Login Activity
+     *
+     * @param context the application context
+     * @return the new Intent
      */
     static Intent loginIntentFactory(Context context) {
         return new Intent(context, LoginActivity.class);

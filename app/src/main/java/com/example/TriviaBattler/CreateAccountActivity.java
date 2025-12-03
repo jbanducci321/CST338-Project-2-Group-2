@@ -24,11 +24,18 @@ public class CreateAccountActivity extends AppCompatActivity {
     private ActivityCreateAccountBinding binding;
     private AppRepository repository;
 
+    /***
+     * Sets up on clickers for the 'Back' button and the 'Create Account' button.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding=ActivityCreateAccountBinding.inflate(getLayoutInflater());
+        binding = ActivityCreateAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         repository = AppRepository.getRepository(getApplication());
@@ -50,9 +57,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Verifies new user input.
-     * Ensures username and password meet basic requirements.
+    /***
+     * Checks if the username and password that was given is valid.<br>
+     * Valid being not empty, not already existing in database, and both passwords matching.<br><br>
+     * If valid, a user is created and added to the database. Goes back to Login Activity.<br>
      */
     private void verifyNewUser() {
         String username = binding.usernameCreateAccountEditText.getText().toString().trim().toLowerCase();
@@ -88,14 +96,14 @@ public class CreateAccountActivity extends AppCompatActivity {
                 User newUser = new User(username, password);
                 repository.insertUser(newUser);
                 toastMaker("Account successfully created!");
-                // START MAIN ACTIVITY
+                // START LOGIN ACTIVITY
                 startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
             }
         });
     }
 
-    /**
-     * Clears all account-creation input fields.
+    /***
+     * Resets all text fields.
      */
     private void resetFields() {
         binding.usernameCreateAccountEditText.setText("");
@@ -104,17 +112,20 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Displays a short toast message.
-     * @param message Text to show in the toast.
+    /***
+     * Displays a toast on screen for the short amount of duration.
+     *
+     * @param message the message to be displayed
      */
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Creates an intent for launching this activity.
-     * @param context Context used to build the intent.
+    /***
+     * Creates a new Intent for the Create Account Activity.
+     *
+     * @param context the application context
+     * @return the new Intent
      */
     static Intent createAccountIntentFactory(Context context) {
         return new Intent(context, CreateAccountActivity.class);
