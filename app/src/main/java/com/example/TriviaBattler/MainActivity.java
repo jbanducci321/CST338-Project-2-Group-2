@@ -189,6 +189,9 @@ public class MainActivity extends AppCompatActivity {
         updateSharedPreference();
     }
 
+    /**
+     * Logs out the current user and returns to the login screen.
+     */
     public void logout() {
         loggedInUserId = LOGGED_OUT;
         updateSharedPreference();
@@ -197,6 +200,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Updates stored userId in shared preferences.
+     */
     private void updateSharedPreference() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);

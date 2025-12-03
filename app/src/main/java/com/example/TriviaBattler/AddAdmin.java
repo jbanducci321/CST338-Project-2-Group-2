@@ -99,7 +99,7 @@ public class AddAdmin extends AppCompatActivity {
             listOfUsers="Non-Admins:\n";
             for(User u : repoList){
                 if(!u.isAdmin())
-                    listOfUsers=listOfUsers+u.getUsername()+"\n";
+                    listOfUsers=listOfUsers + u.getUsername()+"\n";
             }
             binding.adminsTextView.setText(listOfUsers);
         }

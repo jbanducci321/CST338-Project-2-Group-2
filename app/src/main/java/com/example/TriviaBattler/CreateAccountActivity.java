@@ -50,6 +50,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Verifies new user input.
+     * Ensures username and password meet basic requirements.
+     */
     private void verifyNewUser() {
         String username = binding.usernameCreateAccountEditText.getText().toString().trim().toLowerCase();
         String password = binding.passwordCreateAccountEditText.getText().toString();
@@ -90,6 +94,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Clears all account-creation input fields.
+     */
     private void resetFields() {
         binding.usernameCreateAccountEditText.setText("");
         binding.passwordCreateAccountEditText.setText("");
@@ -97,10 +104,18 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Displays a short toast message.
+     * @param message Text to show in the toast.
+     */
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Creates an intent for launching this activity.
+     * @param context Context used to build the intent.
+     */
     static Intent createAccountIntentFactory(Context context) {
         return new Intent(context, CreateAccountActivity.class);
     }

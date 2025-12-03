@@ -57,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Logs in the user using stored or passed userId values.
+     * @param savedInstanceState Restored data containing a previous userId, if available.
+     */
     public void loginUser(Bundle savedInstanceState) {
         // === GymLog-style userId retrieval order: SharedPrefs -> savedInstance -> Intent ===
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
@@ -79,6 +83,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Verifies login credentials and signs in valid users.
+     */
     private void verifyUser() {
         String username = binding.usernameLoginEditText.getText().toString().trim().toLowerCase();
         if (username.isEmpty()) {
@@ -105,10 +112,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Displays a short toast message.
+     * @param message Text to show in the toast.
+     */
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Creates an intent for launching this activity.
+     * @param context Context used to build the intent.
+     */
     static Intent loginIntentFactory(Context context) {
         return new Intent(context, LoginActivity.class);
     }

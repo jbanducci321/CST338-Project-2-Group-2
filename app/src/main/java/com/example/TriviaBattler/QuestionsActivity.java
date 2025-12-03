@@ -145,6 +145,10 @@ public class QuestionsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Displays a random question by difficulty and sets answer controls.
+     * @param difficulty Difficulty level used to fetch a question.
+     */
     private void displayQuestion(String difficulty) {
         // Kill question observers
         if (currentLiveQ != null) {
@@ -190,6 +194,9 @@ public class QuestionsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Removes click listeners from all answer buttons.
+     */
     private void clearAnswerClickListeners() {
         binding.textViewA.setOnClickListener(null);
         binding.textViewB.setOnClickListener(null);
@@ -197,6 +204,11 @@ public class QuestionsActivity extends AppCompatActivity {
         binding.textViewD.setOnClickListener(null);
     }
 
+    /**
+     * Handles answer selection, updates score, and loads the next question.
+     * @param button The pressed answer button.
+     * @param correctAnswer The correct answer text.
+     */
     private void answerClick(Button button, String correctAnswer) {
         // Depending on answer, notify user if it's correct or not
         String selectedAnswer = button.getText().toString();
@@ -233,26 +245,48 @@ public class QuestionsActivity extends AppCompatActivity {
         }, 1000);
     }
 
+    /**
+     * Updates the on-screen question counter display.
+     */
     private void updateQuestionCountDisplay() {
         TextView countView = findViewById(R.id.questionCount);
         countView.setText(currentQuestionIndex + "/" + TOTAL_QUESTIONS);
     }
 
+    /**
+     * Converts HTML-formatted text into a displayable CharSequence.
+     * @param str Raw HTML string to convert.
+     */
     private CharSequence html(String str) {
         if (str == null) str = "";
         return HtmlCompat.fromHtml(str, HtmlCompat.FROM_HTML_MODE_LEGACY);
     }
 
+    /**
+     * Shows a short toast message.
+     * @param message Text to display in the toast.
+     */
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Creates an intent for launching the Questions activity.
+     * @param context Context used to build the intent.
+     * @param userId User ID passed to the activity.
+     * @param difficulty Chosen difficulty level.
+     * @return Intent configured for QuestionsActivity.
+     */
     static Intent questionsIntentFactory(Context context, int userId, String difficulty) {
         Intent intent = new Intent(context, QuestionsActivity.class);
         intent.putExtra(EXTRA_USER_ID, userId);
         intent.putExtra(EXTRA_DIFFICULTY, difficulty);
         return intent;
     }
+
+    /**
+     * Logs out the user and returns to the login screen.
+     */
     private void logout() {
         SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         sp.edit().putInt(getString(R.string.preference_userId_key), LOGGED_OUT).apply();
