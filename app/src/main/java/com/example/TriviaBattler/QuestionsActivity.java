@@ -3,10 +3,16 @@ package com.example.TriviaBattler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,20 +49,29 @@ public class QuestionsActivity extends AppCompatActivity {
     private int currentQuestionIndex = 1;
     private static final int TOTAL_QUESTIONS = 10;
 
+    private int defaultColor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityQuestionsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Get default button color so clicked button's color can be reset after it became red or green
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true);
+        defaultColor = typedValue.data;
+
+        // Set up toolbar and enable back arrow
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Get user id from previous activity and check if it's valid
         repository = AppRepository.getRepository(getApplication());
-
         userId = getIntent().getIntExtra(EXTRA_USER_ID, -1);
         if (userId != -1) {
+            // Refresh menu if user exists
             LiveData<User> userObserver = repository.getUserByUserId(userId);
             userObserver.observe(this, u -> {
                 user = u;
@@ -64,8 +79,11 @@ public class QuestionsActivity extends AppCompatActivity {
                 if (user != null) invalidateOptionsMenu();
             });
         }
+
+        // Get difficulty level from previous activity
         difficulty = getIntent().getStringExtra(EXTRA_DIFFICULTY);
 
+        // Update question display and present 1st question
         updateQuestionCountDisplay();
         displayQuestion(difficulty);
     }
@@ -83,12 +101,14 @@ public class QuestionsActivity extends AppCompatActivity {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
         MenuItem adminItem = menu.findItem(R.id.admin);
 
+        // Hide user and admin options if user doesn't exist
         if (user == null) {
             userItem.setVisible(false);
             adminItem.setVisible(false);
             return true;
         }
 
+        // Display user's name
         userItem.setVisible(true);
         View actionView = userItem.getActionView();
         if (actionView != null) {
@@ -96,6 +116,7 @@ public class QuestionsActivity extends AppCompatActivity {
             if (usernameView != null) usernameView.setText(user.getUsername());
         }
 
+        // Display admin stuff if user is admin
         adminItem.setVisible(user.isAdmin());
         return true;
     }
@@ -105,6 +126,7 @@ public class QuestionsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
+        // Switch activities depending on what was selected
         if (id == android.R.id.home) {
             finish();
             return true;
@@ -124,12 +146,15 @@ public class QuestionsActivity extends AppCompatActivity {
     }
 
     private void displayQuestion(String difficulty) {
+        // Kill question observers
         if (currentLiveQ != null) {
             currentLiveQ.removeObservers(this);
         }
 
+        // Set up question and answer buttons
         currentLiveQ = repository.getRandomQuestionByDifficulty(difficulty);
         currentLiveQ.observe(this, q -> {
+            // Default
             if (q == null) {
                 binding.textViewMainQuestionDisplay.setText("No question found for: " + difficulty);
                 binding.textViewA.setText("");
@@ -140,6 +165,7 @@ public class QuestionsActivity extends AppCompatActivity {
                 return;
             }
 
+            // Gather all answers
             List<String> tempAnswers = new ArrayList<>();
             if (q.getCorrectAnswer() != null) tempAnswers.add(q.getCorrectAnswer());
             if (q.getIncorrectAnswers() != null) tempAnswers.addAll(q.getIncorrectAnswers());
@@ -148,18 +174,19 @@ public class QuestionsActivity extends AppCompatActivity {
             Collections.shuffle(tempAnswers);
             final List<String> answers = tempAnswers;
 
+            // Set buttons and main question text
             binding.textViewMainQuestionDisplay.setText(html(q.getQuestion()));
             binding.textViewA.setText(html(answers.get(0)));
             binding.textViewB.setText(html(answers.get(1)));
             binding.textViewC.setText(html(answers.get(2)));
             binding.textViewD.setText(html(answers.get(3)));
 
+            // Set on click listeners for the answer buttons
             final String correct = q.getCorrectAnswer() == null ? "" : q.getCorrectAnswer();
-
-            binding.textViewA.setOnClickListener(v -> answerClick(answers.get(0), correct));
-            binding.textViewB.setOnClickListener(v -> answerClick(answers.get(1), correct));
-            binding.textViewC.setOnClickListener(v -> answerClick(answers.get(2), correct));
-            binding.textViewD.setOnClickListener(v -> answerClick(answers.get(3), correct));
+            binding.textViewA.setOnClickListener(v -> answerClick(binding.textViewA, correct));
+            binding.textViewB.setOnClickListener(v -> answerClick(binding.textViewB, correct));
+            binding.textViewC.setOnClickListener(v -> answerClick(binding.textViewC, correct));
+            binding.textViewD.setOnClickListener(v -> answerClick(binding.textViewD, correct));
         });
     }
 
@@ -170,24 +197,40 @@ public class QuestionsActivity extends AppCompatActivity {
         binding.textViewD.setOnClickListener(null);
     }
 
-    private void answerClick(String selectedAnswer, String correctAnswer) {
-        if (selectedAnswer != null && selectedAnswer.equals(correctAnswer)) {
+    private void answerClick(Button button, String correctAnswer) {
+        // Depending on answer, notify user if it's correct or not
+        String selectedAnswer = button.getText().toString();
+        if (selectedAnswer.equals(correctAnswer)) {
             toastMaker("Correct!");
+            button.setBackgroundColor(Color.GREEN);
             repository.recordResult(userId, 1, 0);
         } else {
             toastMaker("Incorrect!");
+            button.setBackgroundColor(Color.RED);
             repository.recordResult(userId, 0, 1);
         }
 
-        if (currentQuestionIndex >= TOTAL_QUESTIONS) {
-            Toast.makeText(this, "Quiz complete!", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+        // Wait 1 second before preparing the next question or ending quiz
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Reset button color
+                button.setBackgroundColor(defaultColor);
 
-        currentQuestionIndex++;
-        updateQuestionCountDisplay();
-        displayQuestion(difficulty);
+                // End quiz if all questions were answered
+                if (currentQuestionIndex >= TOTAL_QUESTIONS) {
+                    toastMaker("Quiz complete!");
+                    finish();
+                    return;
+                }
+
+                // Else, prepare for next question
+                currentQuestionIndex++;
+                updateQuestionCountDisplay();
+                displayQuestion(difficulty);
+            }
+        }, 1000);
     }
 
     private void updateQuestionCountDisplay() {
