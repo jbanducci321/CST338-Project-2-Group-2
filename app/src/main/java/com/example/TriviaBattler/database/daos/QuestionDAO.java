@@ -15,6 +15,11 @@ import java.util.List;
 @Dao
 public interface QuestionDAO {
 
+    /**
+     * SQL Questions DAO
+     * @param question questions
+     */
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Question question);
 

@@ -16,6 +16,11 @@ import java.util.List;
 @Dao
 public interface UserDAO {
 
+    /**
+     * SQL for User DAO
+     * @param user user
+     */
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert (User... user);
 

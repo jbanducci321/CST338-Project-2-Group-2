@@ -30,6 +30,12 @@ public class User {
         isAdmin = false;
     }
 
+    /**
+     * generated stuff
+     * @param o object
+     * @return true or false
+     */
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

@@ -10,6 +10,11 @@ import java.util.List;
 
 public class StringListTypeConverter {
 
+    /**
+     * from list
+     * @param list a list
+     * @return [] or to string
+     */
     @TypeConverter
     public String fromList(List<String> list) {
         if (list == null) {
@@ -22,6 +27,11 @@ public class StringListTypeConverter {
         return arr.toString();
     }
 
+    /**
+     * to list
+     * @param json file
+     * @return list
+     */
     @TypeConverter
     public List<String> toList(String json) {
         List<String> list = new ArrayList<>();

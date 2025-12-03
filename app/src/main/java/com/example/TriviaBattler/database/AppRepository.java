@@ -39,12 +39,23 @@ public class AppRepository {
 
     private static AppRepository repository;
 
+    /**
+     * App Repository
+     * @param application application
+     */
+
     public AppRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         this.userDAO = db.userDAO();
         this.questionDAO = db.questionDAO();
         this.statsDAO = db.statsDAO();
     }
+
+    /**
+     * get repository
+     * @param application application
+     * @return repository
+     */
 
     public static AppRepository getRepository(Application application) {
         if (repository != null) {
@@ -67,7 +78,10 @@ public class AppRepository {
         return null;
     }
 
-    //User related
+    /**
+     * user related
+     * @param user user
+     */
     public void insertUser(User... user) {
         AppDatabase.databaseWriteExecutor.execute(()->
         {
@@ -79,6 +93,11 @@ public class AppRepository {
         return userDAO.getUserByUserName(username);
     }
 
+    /**
+     * get user id
+     * @param userId user id
+     * @param callback callback
+     */
     public void getUserByUserIdNotLive(int userId, Consumer<User> callback) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             User user = userDAO.getUserByUserIdNotLive(userId);
@@ -88,13 +107,27 @@ public class AppRepository {
 
     }
 
+    /**
+     * get user by user id
+     * @param userId user id
+     * @return user
+     */
     public LiveData<User> getUserByUserId(int userId) {
         return userDAO.getUserByUserId(userId);
     }
+
+    /**
+     * get stats live
+     * @return stats
+     */
     public LiveData<List<Stats>> getAllStatsLive() {
         return statsDAO.getAllStatsLive();
     }
 
+    /**
+     * get users
+     * @return users
+     */
     public ArrayList<User> getAllUsers(){
         Future<ArrayList<User>> future = AppDatabase.databaseWriteExecutor.submit(
                 new Callable<ArrayList<User>>() {
@@ -112,38 +145,65 @@ public class AppRepository {
 
     }
 
-
+    /**
+     * set admin
+     * @param username of user
+     * @param isAdmin are they admin
+     */
     public void setAdmin(String username, boolean isAdmin) { //Promote/demote a user as admin by their username
         AppDatabase.databaseWriteExecutor.execute(()->{
             userDAO.setAdminByUsername(username, isAdmin);
         });
     }
 
+    /**
+     * check username
+     * @param username username
+     * @return user dao
+     */
     public boolean checkAvailableUsername(String username) {
         return userDAO.checkUsername(username);
     }
 
 
-    //Question related
-    public void insertQuestion (Question question) { //Add in a single question
+    /**
+     * question insert
+     * @param question a question
+     */
+    public void insertQuestion (Question question) {
         AppDatabase.databaseWriteExecutor.execute(()->
         {
             questionDAO.insert(question);
         });
     }
 
-    public void insertQuestions (List<Question> questions) { //Adds in multiple questions
+    /**
+     * multiple insert questions
+     * @param questions multiple questions
+     */
+
+    public void insertQuestions (List<Question> questions) {
         AppDatabase.databaseWriteExecutor.execute(()->
         {
             questionDAO.insertALL(questions);
         });
     }
 
+    /**
+     * get questions by difficulty
+     * @param difficulty difficulty
+     * @return questions
+     */
     public LiveData<Question> getRandomQuestionByDifficulty (String difficulty) { //I feel the method name is pretty self explanatory
         return questionDAO.getRandomByDifficulty(difficulty);
     }
 
-
+    /**
+     * record result
+     * @param userId user id
+     * @param addCorrect right answers
+     * @param addWrong wrong answers
+     */
     public void recordResult(int userId, int addCorrect, int addWrong) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
 
@@ -168,18 +228,33 @@ public class AppRepository {
         });
     }
 
+    /**
+     * get stats by user id
+     * @param userId user id
+     * @return stats dao
+     */
+
     public LiveData<Stats> getStatsByUserId(int userId) {
         return statsDAO.observeByUserId(userId);
     }
 
-    //API related
-
+    /**
+     * questions from api
+     * @param difficulty difficulty
+     * @param amount amount
+     */
     public void refreshQuestionsFromApi(String difficulty, int amount) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             questionDAO.deleteByDifficulty(difficulty);
             Call<ApiResponse> call = ApiClient.getService().getQuestions(amount, difficulty);
         });
     }
+
+    /**
+     * api call
+     * @param difficulty difficulty
+     * @param amount amount
+     */
     public void apiCall(String difficulty, int amount) {
         ApiClient.getService()
                 .getQuestions(amount, difficulty)
@@ -206,7 +281,13 @@ public class AppRepository {
                 });
     }
 
-    //An api call used in the add question activity that lets you select category
+    /**
+     * An api call used in the add question activity that lets you select category
+     * @param difficulty difficulty
+     * @param amount amount
+     * @param categoryId category
+     * @return true or false
+     */
     public boolean apiCallAdminCategory(String difficulty, int amount, int categoryId) {
         try {
             ApiClient.getService()

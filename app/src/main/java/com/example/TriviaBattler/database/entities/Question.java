@@ -31,6 +31,12 @@ public class Question {
         this.incorrectAnswers = incorrectAnswers;
     }
 
+    /**
+     * sets gets equals and hashcode
+     * @param o object
+     * @return true or false
+     */
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

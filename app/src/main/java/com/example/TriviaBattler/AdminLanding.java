@@ -28,6 +28,13 @@ public class AdminLanding extends AppCompatActivity {
     private User user;
     private ActivityAdminLandingBinding binding;
 
+    /**
+     * Create and buttons
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,14 +92,25 @@ public class AdminLanding extends AppCompatActivity {
 
     }
 
-    //Menu Inflater
+    /**
+     * inflate menu!
+     * @param menu The options menu in which you place your items.
+     *
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
-    //Visibility of menu items
+    /**
+     * visibility of menu
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     *
+     * @return true or false
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -115,7 +133,12 @@ public class AdminLanding extends AppCompatActivity {
         return true;
     }
 
-    //Options for menu
+    /**
+     * Options for menu
+     * @param item The menu item that was selected.
+     *
+     * @return true or false
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -134,11 +157,22 @@ public class AdminLanding extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * intent
+     * @param context context
+     * @param loggedInUserId logged in or not
+     * @return intent
+     */
     static Intent adminLandingIntentFactory(Context context, int loggedInUserId){
         Intent intent =new Intent(context, AdminLanding.class);
         intent.putExtra(ADMIN_ACTIVITY_USER_ID, loggedInUserId);
         return intent;
     }
+
+    /**
+     * Logout feature for menu
+     */
     private void logout() {
         SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         sp.edit().putInt(getString(R.string.preference_userId_key), LOGGED_OUT).apply();
