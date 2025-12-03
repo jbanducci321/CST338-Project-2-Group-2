@@ -32,6 +32,13 @@ public class Statistics extends AppCompatActivity {
     private TextView totalTv;
     private TextView questionScoreTv;
 
+    /***
+     * Gets data from the database and sets up UI elements for display.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,13 +80,24 @@ public class Statistics extends AppCompatActivity {
         }
     }
 
-    // Menu inflater
+    /***
+     * Menu inflater.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.logout_menu, menu);
         return true;
     }
 
+    /***
+     * Prepares the Options Menu dropdown selection depending on the logged-in user.
+     *
+     * @param menu The options menu as last shown or first initialized by onCreateOptionsMenu().
+     * @return true
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem userItem = menu.findItem(R.id.logoutMenuItem);
@@ -103,6 +121,12 @@ public class Statistics extends AppCompatActivity {
         return true;
     }
 
+    /***
+     * Processes Options Menu dropdown selection.
+     *
+     * @param item The menu item that was selected.
+     * @return false to allow normal menu processing to proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -127,6 +151,10 @@ public class Statistics extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /***
+     * Logs out the currently logged-in user.<br>
+     * Goes back to the Login Activity.
+     */
     private void logout() {
         SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         sp.edit().putInt(getString(R.string.preference_userId_key), LOGGED_OUT).apply();
@@ -135,6 +163,10 @@ public class Statistics extends AppCompatActivity {
         finish();
     }
 
+    /***
+     * String representation of object.
+     * @return String representation of object
+     */
     @Override
     public String toString() {
         return "Correct Count=" + correctTv +
@@ -143,6 +175,11 @@ public class Statistics extends AppCompatActivity {
                 "\nOverall Score=" + String.format("%.2f", questionScoreTv);
     }
 
+    /***
+     * Object Compare.
+     * @param o   the reference object with which to compare.
+     * @return object equality
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -150,11 +187,22 @@ public class Statistics extends AppCompatActivity {
         return loggedInUserId == that.loggedInUserId && Objects.equals(repository, that.repository) && Objects.equals(user, that.user) && Objects.equals(correctTv, that.correctTv) && Objects.equals(incorrectTv, that.incorrectTv) && Objects.equals(totalTv, that.totalTv) && Objects.equals(questionScoreTv, that.questionScoreTv);
     }
 
+    /***
+     * Object Hash Generator.
+     * @return hash value
+     */
     @Override
     public int hashCode() {
         return Objects.hash(repository, user, loggedInUserId, correctTv, incorrectTv, totalTv, questionScoreTv);
     }
 
+    /***
+     * Creates a new Intent for the Statistics Activity.
+     *
+     * @param context the application context
+     * @param userId the logged-in user's ID
+     * @return the new Intent
+     */
     static Intent statsIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, Statistics.class);
         intent.putExtra(STATS_ACTIVITY_USER_ID, userId);
