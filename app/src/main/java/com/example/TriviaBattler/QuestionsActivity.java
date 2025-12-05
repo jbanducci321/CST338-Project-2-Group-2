@@ -51,6 +51,10 @@ public class QuestionsActivity extends AppCompatActivity {
 
     private int defaultColor;
 
+    private final List<Integer> askedQuestionIds = new ArrayList<>();
+    private int retryCount = 0;
+    private static final int MAX_RETRY = 20;
+
     /***
      * Sets up Toolbar, Options Menu dropdown, and prepares the first question.
      *
@@ -194,6 +198,22 @@ public class QuestionsActivity extends AppCompatActivity {
                 return;
             }
 
+            int qId = q.getQuestionId(); // Saves the current question ID
+
+            if (askedQuestionIds.contains(qId) && askedQuestionIds.size() < TOTAL_QUESTIONS) {
+                if (retryCount < MAX_RETRY) {
+                    retryCount++;
+                    // Try to get another random question
+                    displayQuestion(difficulty);
+                    return;
+                }
+                // If we hit MAX_RETRY limit, just gives up and shows a repeat one
+            } else {
+                // This is a new question for this run
+                askedQuestionIds.add(qId);
+                retryCount = 0;  // reset retries on success
+            }
+
             // Gather all answers
             List<String> tempAnswers = new ArrayList<>();
             if (q.getCorrectAnswer() != null) tempAnswers.add(q.getCorrectAnswer());
@@ -260,6 +280,8 @@ public class QuestionsActivity extends AppCompatActivity {
                 // End quiz if all questions were answered
                 if (currentQuestionIndex >= TOTAL_QUESTIONS) {
                     toastMaker("Quiz complete!");
+                    askedQuestionIds.clear();
+                    retryCount = 0;
                     finish();
                     return;
                 }
