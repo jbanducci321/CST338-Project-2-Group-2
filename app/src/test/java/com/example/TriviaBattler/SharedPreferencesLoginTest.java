@@ -8,8 +8,6 @@ import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
 
-import com.example.TriviaBattler.database.entities.User;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,8 +15,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest = Config.NONE, sdk = Build.VERSION_CODES.P)
+@Config(sdk = Build.VERSION_CODES.P)
 public class SharedPreferencesLoginTest {
+
+    private static final String PREF_FILE_KEY = "com.example.TriviaBattler.PREFERENCE_FILE_KEY";
+    private static final String PREF_USER_ID_KEY = "PREFERENCE_USER_ID";
 
     private Context context;
     private SharedPreferences prefs;
@@ -26,8 +27,9 @@ public class SharedPreferencesLoginTest {
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
+
         prefs = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key),
+                PREF_FILE_KEY,
                 Context.MODE_PRIVATE
         );
         prefs.edit().clear().apply();
@@ -37,11 +39,9 @@ public class SharedPreferencesLoginTest {
     public void testUserIdPersistsToSharedPreferences() {
         int userId = 42;
 
+        prefs.edit().putInt(PREF_USER_ID_KEY, userId).apply();
 
-        prefs.edit().putInt(context.getString(R.string.preference_userId_key), userId).apply();
-
-
-        int stored = prefs.getInt(context.getString(R.string.preference_userId_key), -1);
+        int stored = prefs.getInt(PREF_USER_ID_KEY, -1);
 
         assertEquals(userId, stored);
     }
@@ -49,11 +49,12 @@ public class SharedPreferencesLoginTest {
     @Test
     public void testLogoutClearsUserId() {
         int userId = 99;
-        prefs.edit().putInt(context.getString(R.string.preference_userId_key), userId).apply();
 
-        prefs.edit().putInt(context.getString(R.string.preference_userId_key), -1).apply();
+        prefs.edit().putInt(PREF_USER_ID_KEY, userId).apply();
 
-        int stored = prefs.getInt(context.getString(R.string.preference_userId_key), 123);
+        prefs.edit().putInt(PREF_USER_ID_KEY, -1).apply();
+
+        int stored = prefs.getInt(PREF_USER_ID_KEY, 123);
 
         assertEquals(-1, stored);
     }
