@@ -31,7 +31,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public static final String DB_NAME = "app_db";
     public static final String USER_TABLE = "users";
     public static final String QUESTION_TABLE = "questions";
-    public static final String STATS_TABLE = "stats"; //TODO: Work on the stats entity/dao
+    public static final String STATS_TABLE = "stats";
     private static final int NUMBER_OF_THREADS = 4;
 
     public abstract UserDAO userDAO();

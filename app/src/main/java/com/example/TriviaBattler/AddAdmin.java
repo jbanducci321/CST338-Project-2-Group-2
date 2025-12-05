@@ -80,7 +80,6 @@ public class AddAdmin extends AppCompatActivity {
                 }else {
                     modifyAdmin(search);
                 }
-
                 binding.usernameEditText.setText("");
             }
 
@@ -227,6 +226,7 @@ public class AddAdmin extends AppCompatActivity {
                 updateDisplayedUsers();
                 toastMaker(String.format("%s is now a %s.", search.toLowerCase(), newIsAdmin ? "admin" : "non-admin"));
                 binding.usernameEditText.setText("");
+
             } else if (u != null && u.getUserId() == userId) {
                 toastMaker("Cannot modify current user.");
                 binding.usernameEditText.setText("");
@@ -234,6 +234,7 @@ public class AddAdmin extends AppCompatActivity {
                 toastMaker(String.format("%s is not a valid username.", search));
                 binding.usernameEditText.setText("");
             }
+            updateDisplayedUsers();
             observer.removeObservers(AddAdmin.this);
         });
 
