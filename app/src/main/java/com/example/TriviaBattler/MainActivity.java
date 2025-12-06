@@ -208,15 +208,15 @@ public class MainActivity extends AppCompatActivity {
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
         userObserver.observe(this, u -> {
             user = u;
-//            if (user != null) {
-//                invalidateOptionsMenu();
-//                // Update the role text exactly when user arrives/changes
-//                String role = user.isAdmin() ? "Admin" : "User";
-//                String text = "Logged in as: " + user.getUsername() + "\nRole: " + role;
-//                binding.roleTextView.setText(text);
-//                binding.welcomeUserTextView.setText("Welcome\n"+user.getUsername()+"!");
-//
-//            }
+            if (user != null) {
+                invalidateOptionsMenu();
+                // Update the role text exactly when user arrives/changes
+                String role = user.isAdmin() ? "Admin" : "User";
+                String text = "Logged in as: " + user.getUsername() + "\nRole: " + role;
+                //binding.roleTextView.setText(text);
+                binding.welcomeUserTextView.setText("Welcome\n"+user.getUsername()+"!");
+
+            }
         });
     }
 
