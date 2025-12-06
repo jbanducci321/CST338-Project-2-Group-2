@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 
+import com.bumptech.glide.Glide;
 import com.example.TriviaBattler.R;
 import com.example.TriviaBattler.database.AppRepository;
 import com.example.TriviaBattler.database.entities.User;
@@ -56,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.riddlemethisbatman)
+                .into(binding.imageViewGif);
 
         //start menu
         setSupportActionBar(findViewById(R.id.toolbar));
@@ -202,15 +208,15 @@ public class MainActivity extends AppCompatActivity {
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
         userObserver.observe(this, u -> {
             user = u;
-            if (user != null) {
-                invalidateOptionsMenu();
-                // Update the role text exactly when user arrives/changes
-                String role = user.isAdmin() ? "Admin" : "User";
-                String text = "Logged in as: " + user.getUsername() + "\nRole: " + role;
-                binding.roleTextView.setText(text);
-                binding.welcomeUserTextView.setText("Welcome\n"+user.getUsername()+"!");
-
-            }
+//            if (user != null) {
+//                invalidateOptionsMenu();
+//                // Update the role text exactly when user arrives/changes
+//                String role = user.isAdmin() ? "Admin" : "User";
+//                String text = "Logged in as: " + user.getUsername() + "\nRole: " + role;
+//                binding.roleTextView.setText(text);
+//                binding.welcomeUserTextView.setText("Welcome\n"+user.getUsername()+"!");
+//
+//            }
         });
     }
 

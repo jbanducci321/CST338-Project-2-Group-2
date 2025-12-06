@@ -17,17 +17,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/roleTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="role goes here"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/hardQuestionsButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="50dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/roleTextView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:text="role goes here"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/hardQuestionsButton"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:layout_marginTop="50dp"/>-->
 
     <TextView
         android:id="@+id/welcomeUserTextView"
@@ -88,6 +88,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/normalQuestionsButton" />
 
+    <ImageView
+        android:id="@+id/imageViewGif"
+        android:layout_width="315dp"
+        android:layout_height="223dp"
+        android:layout_marginBottom="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/gif_desc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hardQuestionsButton" />
 
 
 
