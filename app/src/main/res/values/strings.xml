@@ -22,6 +22,8 @@
     <string name="b">B</string>
     <string name="a">A</string>
 
+    <string name="gif_desc">Fun trivia animation</string>
+
     <string-array name="category_list">
         <item>Any Category</item>
         <item>General Knowledge</item>
